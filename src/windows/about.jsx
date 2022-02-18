@@ -12,7 +12,12 @@ const About = () => (
   }} scroll="y">
     <span style={{ alignSelf: 'center' }}>NavalArt 自动摆烂系统</span>
     <span style={{ alignSelf: 'center' }}>by Chuigda WhiteGive (第七漂浮物建造厂)</span>
+    <br/>
+    <span>本程序用于快速生成 NavalArt 中的舰艏与 24 段圆弧，非常适合<del>摆烂</del>大量下饺子。一定程度上来说就是一个高级点的 PTB 辅助设计。</span>
+    <br/>
+    <span>本程序是开源软件，访问 <a href="https://github.com/chuigda/Bailan-box">github.com/chuigda/Bailan-box</a> 来获取源代码。</span>
     <br />
+    <hr style={{ width: '100%' }} />
     <span style={{ alignSelf: 'center' }}>致谢 (排名不分先后)</span>
     <div style={{ alignSelf: 'center' }}>
       <ul className="about-listing">
@@ -25,6 +30,7 @@ const About = () => (
         <li>你滴小将，无限扫射</li>
       </ul>
     </div>
+    <br />
     <hr style={{ width: '100%' }}/>
     <span style={{ alignSelf: 'center' }}>许可证</span>
     <br/>
