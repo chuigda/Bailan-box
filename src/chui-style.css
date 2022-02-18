@@ -1,0 +1,248 @@
+@font-face {
+    font-family: 'vga';
+    src: url("./chui-res/vga.ttf");
+    unicode-range: U+00-FF, U+980-9FF;
+}
+
+@font-face {
+    font-family: 'ipix';
+    src: url("./chui-res/ipix.ttf");
+}
+
+* {
+    font-family: vga, ipix, 'SimSun', monospace;
+    font-size: 16px;
+    filter: contrast(1);
+    cursor: url("./chui-res/point.cur"), pointer;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+}
+
+::selection {
+    background-color: rgb(0, 0, 187);
+    color: white;
+}
+
+span {
+    cursor: url("./chui-res/text.cur"), text;
+}
+
+.chui-cursor-move {
+    cursor: url("./chui-res/move.cur") 11 11, move;
+}
+
+.chui-cursor-busy {
+    cursor: url("./chui-res/busy.cur") 9 11, wait !important;
+}
+
+.chui-cursor-help {
+    cursor: url("./chui-res/help.cur"), help;
+}
+
+.chui-busy-overlay {
+    opacity: 0.5;
+}
+
+.chui-button-div {
+    display: inline;
+    outline: 1px solid;
+}
+
+.chui-button {
+    border: 1px dotted;
+    box-sizing: border-box;
+}
+
+.chui-button:hover {
+    border: 1px solid;
+}
+
+.chui-button:active {
+    border: 1px solid;
+    box-shadow: 0 0 0 1px inset;
+}
+
+.chui-line-edit {
+    outline: 1px solid;
+    border: 1px solid transparent;
+    cursor: url("./chui-res/text.cur"), text;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.chui-line-edit:hover {
+    border: 1px solid;
+}
+
+.chui-line-edit:focus {
+    border: 1px solid;
+}
+
+.chui-text-area {
+    outline: 1px solid;
+    border: 1px solid transparent;
+    cursor: url("./chui-res/text.cur"), text;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.chui-text-area:hover {
+    border: 1px solid;
+}
+
+.chui-text-area:focus {
+    border: 1px solid;
+}
+
+.chui-text-area::-webkit-scrollbar {
+    width: 1em;
+    cursor: url("./chui-res/point.cur"), pointer;
+}
+
+.chui-text-area::-webkit-scrollbar-track {
+    background-color: gray;
+}
+
+.chui-text-area::-webkit-scrollbar-thumb {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 0;
+    margin: 4px
+}
+
+.chui-scroll-area {
+    outline: 1px solid;
+    border: 1px solid transparent;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.chui-scroll-area::-webkit-scrollbar {
+    width: 1em;
+    cursor: url("./chui-res/point.cur"), pointer;
+}
+
+.chui-scroll-area::-webkit-scrollbar-track {
+    background-color: gray;
+}
+
+.chui-scroll-area::-webkit-scrollbar-thumb {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 0;
+    margin: 4px
+}
+
+.chui-table {
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+.chui-table td { padding: 2px }
+.chui-table thead { border-bottom: 2px solid; }
+.chui-table td + td { border-left: 1px solid; }
+.chui-table th + th { border-left: 1px solid; }
+.chui-table tr + tr { border-top: 1px solid; }
+
+.chui-window {
+    border: 1px solid;
+    box-shadow: 5px 5px gray;
+}
+
+.chui-item-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px transparent solid;
+    user-select: none;
+}
+
+.chui-item-icon:active {
+    color: darkblue;
+    opacity: 0.5;
+    border: 1px gray dotted;
+}
+
+.chui-item-icon-icon {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.chui-slider {
+    width: calc(100% - 2px);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    color: inherit;
+    background: inherit;
+}
+
+.chui-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    border: 1px solid;
+    width: 8px;
+    height: 14px;
+    cursor: url("./chui-res/point.cur"), pointer;
+
+    color: inherit;
+    background-color: currentcolor;
+    margin-top: -6px;
+    margin-left: 0;
+}
+
+.chui-slider::-moz-range-thumb {
+    -moz-appearance: none;
+    appearance: none;
+
+    border: 1px solid;
+    border-radius: 0;
+    width: 4px;
+    height: 12px;
+    cursor: url("./chui-res/point.cur"), pointer;
+
+    color: inherit;
+    background-color: currentcolor;
+}
+
+.chui-slider::-ms-thumb {
+    margin: 0;
+}
+
+.chui-slider:focus {
+    outline: none;
+}
+
+.chui-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: url("./chui-res/point.cur"), pointer;
+    color: inherit;
+    background: inherit;
+    border-radius: 0;
+    border: 1px solid;
+}
+
+.chui-slider::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    cursor: url("./chui-res/point.cur"), pointer;
+    color: inherit;
+    background: inherit;
+    border-radius: 0;
+    border: 1px solid;
+}

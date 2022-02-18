@@ -1,0 +1,4 @@
+= Bailan-Box
+author: Chuigda WhiteGive<icey@icey.tech>
+
+NavalArt 自动摆烂程序

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="摆烂工具盒" />
+    <link rel="manifest" href="manifest.json" />
+    <title>摆烂工具盒</title>
+  </head>
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.\n<br/>你需要启用 JavaScript 来运行这个应用程序。</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
+    <script type="text/javascript">
+      // TODO re-enable this in production mode
+      /*
+      window.addEventListener('beforeunload', e => {
+        e.preventDefault()
+        e.returnValue = ''
+      })
+      */
+    </script>
+  </body>
+</html>
