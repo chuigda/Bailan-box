@@ -26,9 +26,12 @@ const About = () => (
         <li>otig</li>
         <li>摩尔曼斯克</li>
         <li>拉莱耶造船厂</li>
-        <li>二十米大分段靶舰制造专家河马</li>
+        <li>20米大分段靶舰专家河马</li>
         <li>Anget12君</li>
         <li>你滴小将，无限扫射</li>
+        <li>super plz</li>
+        <li>WHF</li>
+        <li>Moskau/AwayOfaLife</li>
       </ul>
     </div>
     <br />
