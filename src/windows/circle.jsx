@@ -4,18 +4,25 @@ import React, { useMemo, useState } from 'react'
 import Canvas from '../components/canvas.jsx'
 import LineEdit from '../chui-components/line-edit.jsx'
 import Button from '../chui-components/button.jsx'
-import Slider from '../chui-components/slider'
+import Slider from '../chui-components/slider.jsx'
+import { adjustableHull, ship } from '../util/part'
 
 const fanAngle = Math.PI / 12
 
 const Circle = () => {
   const [radius, setRadius] = useState('2')
   const [thickness, setThickness] = useState('0.5')
+  const [naHeight, setNaHeight] = useState('1')
   const [warn, setWarn] = useState('')
 
   const edges = useMemo(() => {
+    const naHeightNum = parseFloat(naHeight)
     const radiusNum = parseFloat(radius)
     const thicknessNum = parseFloat(thickness)
+    if (Number.isNaN(naHeightNum)) {
+      setWarn('高度必须是数值')
+      return []
+    }
     if (Number.isNaN(radiusNum)) {
       setWarn('半径必须是数值')
       return []
@@ -24,8 +31,20 @@ const Circle = () => {
       setWarn('厚度必须是数值')
       return []
     }
+    if (naHeightNum <= 0) {
+      setWarn('高度小于等于 0 的圆没有意义')
+      return []
+    }
+    if (radiusNum <= 0) {
+      setWarn('半径小于等于 0 的圆没有意义')
+      return []
+    }
+    if (thicknessNum <= 0) {
+      setWarn('厚度小于等于 0 的圆没有意义')
+      return []
+    }
     if (thicknessNum > radiusNum) {
-      setWarn('厚度不能大于半径，不然要寄')
+      setWarn('厚度不能大于半径')
       return []
     }
     setWarn('')
@@ -46,7 +65,7 @@ const Circle = () => {
 
       const innerTriangleHeight = idealDistance - thicknessNum
       const innerRadius = innerTriangleHeight / Math.cos(fanAngle / 2)
-      const innerTriangleWidth = 2 * (innerTriangleHeight / Math.tan(fanAngle / 2)) * 2
+      const innerTriangleWidth = 2 * innerRadius * Math.sin(fanAngle / 2)
       const innerLine = {
         x1: innerRadius * Math.cos(endAngle),
         y1: innerRadius * Math.sin(endAngle),
@@ -57,7 +76,7 @@ const Circle = () => {
 
       const outerTriangleHeight = idealDistance + thicknessNum
       const outerRadius = outerTriangleHeight / Math.cos(fanAngle / 2)
-      const outerTriangleWidth = 2 * (outerTriangleHeight / Math.tan(fanAngle / 2)) * 2
+      const outerTriangleWidth = 2 * outerRadius * Math.sin(fanAngle / 2)
       const outerLine = {
         x1: outerRadius * Math.cos(endAngle),
         y1: outerRadius * Math.sin(endAngle),
@@ -72,7 +91,7 @@ const Circle = () => {
     }
 
     return edges
-  }, [radius, thickness])
+  }, [radius, thickness, naHeight])
 
   const paintEdges = (canvas, canvasWidth, canvasHeight) => {
     const radiusNum = parseFloat(radius)
@@ -103,6 +122,35 @@ const Circle = () => {
     }
   }
 
+  const generateXML = () => {
+    const sections = []
+    for (const edge of edges) {
+      const {
+        point, angle, innerLine, outerLine
+      } = edge
+
+      const navalArtAngle = 360 * (1 - angle / (Math.PI * 2))
+      // noinspection JSSuspiciousNameCombination
+      sections.push(adjustableHull({
+        length: parseFloat(thickness) * 2,
+        height: naHeight,
+        frontWidth: innerLine.length,
+        backWidth: outerLine.length,
+        position: { x: point.y, y: 0, z: point.x },
+        rotation: { y: navalArtAngle }
+      }))
+    }
+
+    const shipString = ship(`半径为 ${radius}, 高度为 ${naHeight}，厚度为 ${thickness} 的圆环`, sections)
+
+    const element = document.createElement('a')
+    const file = new Blob([shipString], { type: 'text/plain' })
+    element.href = URL.createObjectURL(file)
+    element.download = '圆环.na'
+    document.body.appendChild(element)
+    element.click()
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -120,12 +168,13 @@ const Circle = () => {
         gridTemplateColumns: '100px 1fr',
         gridAutoRows: 'minmax(min-content, max-content)'
       }}>
+        <div>高度</div> <LineEdit valueState={[naHeight, setNaHeight]} />
         <div>半径</div> <LineEdit valueState={[radius, setRadius]} />
         <div>厚度</div> <LineEdit valueState={[thickness, setThickness]} />
         <div />
         <Slider valueState={[thickness, setThickness]} min={0.01} max={radius} step={0.01} />
         <div /> <LineEdit foreColor="red" readOnly value={warn} />
-        <div /> <Button>下载XML</Button>
+        <div /> <Button disabled={edges.length === 0} onClick={generateXML}>下载XML</Button>
       </div>
     </div>
   )
