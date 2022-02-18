@@ -8,7 +8,8 @@ const About = () => (
     width: '100%',
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: '4px'
   }} scroll="y">
     <span style={{ alignSelf: 'center' }}>NavalArt 自动摆烂系统</span>
     <span style={{ alignSelf: 'center' }}>by Chuigda WhiteGive (第七漂浮物建造厂)</span>
