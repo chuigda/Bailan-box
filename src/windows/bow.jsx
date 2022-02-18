@@ -55,8 +55,6 @@ const paintDot = (canvas, x, y) => {
   canvas.fill()
 }
 
-const makeSetter = (setter, handler) => event => setter((handler || (x => x))(event.target.value))
-
 // eslint-disable-next-line arrow-body-style
 const makeBezier3Painter = (length, widthHalf, originX1, originY1, originX2, originY2, setWarn) => {
   return (canvas, canvasWidth, canvasHeight) => {

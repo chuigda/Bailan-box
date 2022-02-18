@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import './chui-style.css'
 import './style.css'
+
 import { createWindow, WindowManager } from './chui-components/window-mgr.jsx'
 import TaskBar from './chui-components/task-bar.jsx'
 import ItemIcon from './chui-components/item-icon.jsx'
@@ -10,6 +11,7 @@ import { getGlobalColor } from './chui-config/color'
 import JSEval from './windows/js-eval.jsx'
 import Bow from './windows/bow.jsx'
 import About from './windows/about.jsx'
+import Circle from './windows/circle.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
@@ -33,6 +35,17 @@ const App = () => {
     {
       foreColor: 'blue',
       style: { width: '1152px', height: '864px' }
+    }
+  )
+
+  const openCircleGenerator = windowManagerContext => createWindow(
+    windowManagerContext,
+    null,
+    '圆弧自动摆',
+    <Circle />,
+    {
+      foreColor: 'blue',
+      style: { width: '900px', height: '640px' }
     }
   )
 
@@ -77,7 +90,10 @@ const App = () => {
                     icon={toolFolderImageUrl}
                     text="摆舰艏"
                     onUseItem={openBowGenerator} />
-          <ItemIcon iconSize={48} icon={displayPropertiesImageUrl} text="摆圆弧" />
+          <ItemIcon iconSize={48}
+                    icon={displayPropertiesImageUrl}
+                    text="摆圆弧"
+                    onUseItem={openCircleGenerator} />
           <ItemIcon iconSize={48}
                     icon={jscriptImageUrl}
                     text="JScript"

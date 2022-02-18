@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 const Slider = ({
-  min, max, step, valueState, autoCorrect, ...rest
+  min, max, step, valueState, autoCorrect, style, ...rest
 }) => {
   const [value, setValue] = valueState
 
@@ -33,6 +33,10 @@ const Slider = ({
            max={max}
            step={step || 1}
            value={value}
+           style={{
+             height: '16px',
+             ...style
+           }}
            onChange={e => setValue(e.target.value)}
            {...rest}
     />
@@ -44,6 +48,7 @@ Slider.propTypes = {
   max: PropTypes.any.isRequired,
   valueState: PropTypes.array.isRequired,
   autoCorrect: PropTypes.bool,
+  style: PropTypes.object,
   step: PropTypes.number,
 }
 
