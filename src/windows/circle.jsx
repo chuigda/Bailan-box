@@ -10,9 +10,8 @@ import Button from '../chui-components/button.jsx'
 import Slider from '../chui-components/slider.jsx'
 import { adjustableHull, customPart, ship } from '../util/part'
 
-const fanAngle = Math.PI / 12
-
 const Circle = () => {
+  const [sectionCount, setSectionCount] = useState('24')
   const [radius, setRadius] = useState('2')
   const [thickness, setThickness] = useState('0.5')
   const [naHeight, setNaHeight] = useState('1')
@@ -20,11 +19,16 @@ const Circle = () => {
 
   const canvasRef = useRef(null)
 
+  const sectionCountNum = parseInt(sectionCount, 10)
   const naHeightNum = parseFloat(naHeight)
   const radiusNum = parseFloat(radius)
   const thicknessNum = parseFloat(thickness)
 
   const edges = useMemo(() => {
+    if (Number.isNaN(sectionCountNum)) {
+      setWarn('段数必须是数值')
+      return []
+    }
     if (Number.isNaN(naHeightNum)) {
       setWarn('高度必须是数值')
       return []
@@ -35,6 +39,10 @@ const Circle = () => {
     }
     if (Number.isNaN(thicknessNum)) {
       setWarn('厚度必须是数值')
+      return []
+    }
+    if (sectionCountNum <= 2) {
+      setWarn('必须有至少三段')
       return []
     }
     if (naHeightNum <= 0) {
@@ -55,8 +63,10 @@ const Circle = () => {
     }
     setWarn('')
 
+    const fanAngle = Math.PI / (sectionCountNum / 2)
+
     const edges = []
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < sectionCountNum; i++) {
       const startAngle = i * fanAngle
       const endAngle = (i + 1) * fanAngle
       const fanMidAngle = startAngle + fanAngle / 2
@@ -97,7 +107,7 @@ const Circle = () => {
     }
 
     return edges
-  }, [radiusNum, thicknessNum, naHeightNum])
+  }, [radiusNum, thicknessNum, naHeightNum, sectionCountNum])
 
   const paintEdges = (canvas, canvasWidth, canvasHeight) => {
     if (Number.isNaN(radiusNum)) {
@@ -159,7 +169,8 @@ const Circle = () => {
     }
 
     const shipString = ship(partDescription, circleParts)
-    saveAs(shipString, `${partName}.na`)
+    const blob = new Blob([shipString], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, `${partName}.na`)
   }
 
   const generateCustomPartXML = () => {
@@ -199,6 +210,7 @@ const Circle = () => {
         gridTemplateColumns: '100px 1fr',
         gridAutoRows: 'minmax(min-content, max-content)'
       }}>
+        <div>圆弧段数</div> <LineEdit valueState={[sectionCount, setSectionCount]} />
         <div>高度</div> <LineEdit valueState={[naHeight, setNaHeight]} />
         <div>半径</div> <LineEdit valueState={[radius, setRadius]} />
         <div>厚度</div> <LineEdit valueState={[thickness, setThickness]} />
