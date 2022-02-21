@@ -15,8 +15,10 @@ import Circle from './windows/circle.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
+import accessibilityImageUrl from './chui-res/icons/accessibility-2.png'
 import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
+import worldImageUrl from './chui-res/icons/world-2.png'
 
 const allowDrop = event => {
   event.preventDefault()
@@ -95,9 +97,15 @@ const App = () => {
                     text="摆圆弧"
                     onUseItem={openCircleGenerator} />
           <ItemIcon iconSize={48}
+                    icon={accessibilityImageUrl}
+                    text="拉张缆" />
+          <ItemIcon iconSize={48}
                     icon={jscriptImageUrl}
                     text="JScript"
                     onUseItem={openJscriptEval} />
+          <ItemIcon iconSize={48}
+                    icon={worldImageUrl}
+                    text="语言" />
           <ItemIcon iconSize={48}
                     icon={helpBookImageUrl}
                     text="关于"

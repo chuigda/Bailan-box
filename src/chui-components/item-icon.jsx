@@ -15,11 +15,11 @@ const ItemIcon = ({
     <div className="chui-item-icon"
          onDoubleClick={event => (onUseItem ? onUseItem(windowManagerContext, event) : false)}
          style={{
-           minWidth: `calc(${iconSize}px + 2em)`,
-           maxWidth: `calc(${iconSize}px + 2em)`,
-           maxHeight: `calc(${iconSize}px + 6px + 2em)`
-         }}
-    >
+           minWidth: `calc(${iconSize}px + 2.1em)`,
+           maxWidth: `calc(${iconSize}px + 2.1em)`,
+           maxHeight: `calc(${iconSize}px + 6px + 2.1em)`,
+           textAlign: 'center'
+         }}>
       <div className="chui-item-icon-icon" style={{
         width: iconSize,
         height: iconSize,
@@ -28,7 +28,7 @@ const ItemIcon = ({
       }} />
       <div className="chui-item-icon-text" style={{
         marginTop: '4px',
-        height: '2em',
+        height: '2.3em',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       }}>
