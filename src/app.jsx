@@ -12,6 +12,7 @@ import JSEval from './windows/js-eval.jsx'
 import Bow from './windows/bow.jsx'
 import About from './windows/about.jsx'
 import Circle from './windows/circle.jsx'
+import Wire from './windows/wire.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
@@ -19,7 +20,6 @@ import accessibilityImageUrl from './chui-res/icons/accessibility-2.png'
 import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
 import worldImageUrl from './chui-res/icons/world-2.png'
-import Wire from './windows/wire'
 
 const allowDrop = event => {
   event.preventDefault()

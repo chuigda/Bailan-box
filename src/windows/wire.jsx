@@ -3,8 +3,11 @@ import { XMLParser } from 'fast-xml-parser'
 
 import ScrollArea from '../chui-components/scroll-area.jsx'
 import Button from '../chui-components/button.jsx'
+import { typeAssert } from '../util/type-assert'
+import shipSaveAssertion from '../util/ship-save-assertion'
 
 const Wire = () => {
+  const [color, setColor] = useState('black')
   const [text, setText] = useState(null)
   const onFileChosen = event => {
     event.preventDefault()
@@ -20,11 +23,20 @@ const Wire = () => {
       return ['', '选择一个文件以开始处理']
     }
 
-    console.log(text)
-    const parser = new XMLParser()
+    const parser = new XMLParser({
+      preserveOrder: true,
+      ignoreAttributes: false,
+      attributeNamePrefix: ''
+    })
     const object = parser.parse(text)
-    console.log(object)
+    try {
+      typeAssert(object, shipSaveAssertion)
+    } catch (assertionFailure) {
+      setColor('red')
+      return ['', assertionFailure]
+    }
 
+    setColor('black')
     return ['', '没有需要显示的内容']
   }, [text])
 
@@ -60,7 +72,7 @@ const Wire = () => {
         flexGrow: '1',
         flexBasis: '450px',
         padding: '2px'
-      }}>
+      }} foreColor={color}>
         { resultText }
       </ScrollArea>
       <div style={{ border: '1px solid black', padding: '2px' }}>
