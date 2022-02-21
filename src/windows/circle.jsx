@@ -1,11 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
+
 import Canvas from '../components/canvas.jsx'
 import LineEdit from '../chui-components/line-edit.jsx'
 import Button from '../chui-components/button.jsx'
 import Slider from '../chui-components/slider.jsx'
-import { adjustableHull, ship } from '../util/part'
+import { adjustableHull, customPart, ship } from '../util/part'
 
 const fanAngle = Math.PI / 12
 
@@ -15,10 +18,13 @@ const Circle = () => {
   const [naHeight, setNaHeight] = useState('1')
   const [warn, setWarn] = useState('')
 
+  const canvasRef = useRef(null)
+
+  const naHeightNum = parseFloat(naHeight)
+  const radiusNum = parseFloat(radius)
+  const thicknessNum = parseFloat(thickness)
+
   const edges = useMemo(() => {
-    const naHeightNum = parseFloat(naHeight)
-    const radiusNum = parseFloat(radius)
-    const thicknessNum = parseFloat(thickness)
     if (Number.isNaN(naHeightNum)) {
       setWarn('高度必须是数值')
       return []
@@ -91,10 +97,9 @@ const Circle = () => {
     }
 
     return edges
-  }, [radius, thickness, naHeight])
+  }, [radiusNum, thicknessNum, naHeightNum])
 
   const paintEdges = (canvas, canvasWidth, canvasHeight) => {
-    const radiusNum = parseFloat(radius)
     if (Number.isNaN(radiusNum)) {
       return
     }
@@ -122,8 +127,9 @@ const Circle = () => {
     }
   }
 
-  const generateXML = () => {
-    const sections = []
+  const circleParts = useMemo(() => {
+    const parts = []
+
     for (const edge of edges) {
       const {
         point, angle, innerLine, outerLine
@@ -131,7 +137,7 @@ const Circle = () => {
 
       const navalArtAngle = 360 * (1 - angle / (Math.PI * 2))
       // noinspection JSSuspiciousNameCombination
-      sections.push(adjustableHull({
+      parts.push(adjustableHull({
         length: parseFloat(thickness) * 2,
         height: naHeight,
         frontWidth: innerLine.length,
@@ -141,14 +147,39 @@ const Circle = () => {
       }))
     }
 
-    const shipString = ship(`半径为 ${radius}, 高度为 ${naHeight}，厚度为 ${thickness} 的圆环`, sections)
+    return parts
+  }, [edges, naHeight])
 
-    const element = document.createElement('a')
-    const file = new Blob([shipString], { type: 'text/plain' })
-    element.href = URL.createObjectURL(file)
-    element.download = '圆环.na'
-    document.body.appendChild(element)
-    element.click()
+  const partName = `circle-${radius}-${naHeight}-${thickness}`
+  const partDescription = `半径为 ${radius}, 高度为 ${naHeight}，厚度为 ${thickness} 的圆环`
+
+  const generateSaveXML = () => {
+    if (!edges) {
+      return
+    }
+
+    const shipString = ship(partDescription, circleParts)
+    saveAs(shipString, `${partName}.na`)
+  }
+
+  const generateCustomPartXML = () => {
+    if (!edges) {
+      return
+    }
+
+    const customPartString = customPart(
+      partDescription, circleParts,
+      (radiusNum + thicknessNum) * 2, naHeightNum, (radiusNum + thicknessNum) * 2,
+      0, 0, 0
+    )
+    const canvasBase64 = canvasRef.current.toDataURL().split('base64,')[1]
+
+    const zip = new JSZip()
+    const folder = zip.folder(partName)
+    folder.file(`${partName}.napart`, customPartString)
+    folder.file(`${partName}.png`, canvasBase64, { base64: true })
+
+    zip.generateAsync({ type: 'blob' }).then(content => saveAs(content, `${partName}.zip`))
   }
 
   return (
@@ -158,7 +189,7 @@ const Circle = () => {
       columnGap: '10px',
       padding: '4px'
     }}>
-      <Canvas paintFunction={paintEdges} height={600} width={600} style={{
+      <Canvas canvasRef={canvasRef} paintFunction={paintEdges} height={600} width={600} style={{
         border: '1px solid black'
       }} />
       <div style={{
@@ -174,7 +205,9 @@ const Circle = () => {
         <div />
         <Slider valueState={[thickness, setThickness]} min={0.01} max={radius} step={0.01} />
         <div /> <LineEdit foreColor="red" readOnly value={warn} />
-        <div /> <Button disabled={edges.length === 0} onClick={generateXML}>下载XML</Button>
+        <div /> <Button disabled={edges.length === 0} onClick={generateSaveXML}>下载存档 XML</Button>
+        <div />
+        <Button disabled={edges.length === 0} onClick={generateCustomPartXML}>下载自定义组件 ZIP</Button>
       </div>
     </div>
   )

@@ -28,3 +28,11 @@ export const ship = (description, sections) => `<root>
 ${sections.reduce((x, y) => `${x}\n${y}`, '')}
   </ship>
 </root>`
+
+export const customPart = (description, sections, sizeX, sizeY, sizeZ, centerX, centerY, centerZ) => `<root>
+  <customPart author="自动摆烂" description="${description}" Parts="${sections.length}"
+              SizeX="${sizeX}" SizeY="${sizeY}" SizeZ="${sizeZ}"
+              CenterX="${centerX}" CenterY="${centerY}" CenterZ="${centerZ}">
+${sections.reduce((x, y) => `${x}\n${y}`, '')}
+  </customPart>
+</root>`

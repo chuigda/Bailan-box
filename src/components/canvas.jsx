@@ -6,11 +6,12 @@ const Canvas = ({
   width,
   height,
   style,
+  canvasRef,
   ...rest
 }) => {
   const realWidth = width * 2
   const realHeight = height * 2
-  const ref = useRef()
+  const ref = canvasRef || useRef()
 
   useEffect(() => ref.current.getContext('2d').translate(0.5, 0.5), [])
 
@@ -37,6 +38,7 @@ Canvas.propTypes = {
   paintFunction: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  canvasRef: PropTypes.object,
   style: PropTypes.object
 }
 
