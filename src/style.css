@@ -1,3 +1,33 @@
 ul {
     list-style-type: square;
 }
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload-div {
+    display: inline-block;
+    outline: 1px solid;
+    color: black;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    border: 1px dotted;
+    box-sizing: border-box;
+    padding: 1px;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    color: inherit;
+}
+
+.custom-file-upload:hover {
+    border: 1px solid;
+}
+
+.custom-file-upload:active {
+    border: 1px solid;
+    box-shadow: 0 0 0 1px inset;
+}

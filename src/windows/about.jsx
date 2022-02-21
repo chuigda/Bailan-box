@@ -11,7 +11,7 @@ const About = () => (
     flexDirection: 'column',
     padding: '4px'
   }} scroll="y">
-    <span style={{ alignSelf: 'center' }}>NavalArt 自动摆烂系统</span>
+    <span style={{ alignSelf: 'center' }}>NavalArt 摆烂盒子</span>
     <span style={{ alignSelf: 'center' }}>by Chuigda WhiteGive (第七漂浮物建造厂)</span>
     <br/>
     <span>本程序用于快速生成 NavalArt 中的舰艏与 24 段圆弧，非常适合<del>摆烂</del>大量下饺子。一定程度上来说就是一个高级点的 PTB 辅助设计。</span>
@@ -32,6 +32,7 @@ const About = () => (
         <li>super plz</li>
         <li>WHF</li>
         <li>Moskau/AwayOfaLife</li>
+        <li>8ig</li>
       </ul>
     </div>
     <br />
@@ -123,6 +124,19 @@ const About = () => (
     <span>MIT License</span>
     <br />
     <span>Copyright © 2016 Eli Grey.</span>
+    <br />
+    <span>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</span>
+    <br />
+    <span>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
+    <br />
+    <span>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+    <br />
+    <br />
+    <span style={{ alignSelf: 'center' }}>fast-xml-parser</span>
+    <br/>
+    <span>MIT License</span>
+    <br />
+    <span>Copyright (c) 2017 Amit Kumar Gupta</span>
     <br />
     <span>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</span>
     <br />

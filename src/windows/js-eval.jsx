@@ -68,7 +68,7 @@ const JSEval = () => {
       </span>
     </div>
   ))
-  displayComponents.push(<ScrollPlaceholder />)
+  displayComponents.push(<ScrollPlaceholder key="scroll-placeholder" />)
 
   return (
     <div style={{

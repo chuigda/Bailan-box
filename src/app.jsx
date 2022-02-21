@@ -19,6 +19,7 @@ import accessibilityImageUrl from './chui-res/icons/accessibility-2.png'
 import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
 import worldImageUrl from './chui-res/icons/world-2.png'
+import Wire from './windows/wire'
 
 const allowDrop = event => {
   event.preventDefault()
@@ -48,6 +49,17 @@ const App = () => {
     {
       foreColor: 'blue',
       style: { width: '900px', height: '640px' }
+    }
+  )
+
+  const openWireMaker = windowManagerContext => createWindow(
+    windowManagerContext,
+    null,
+    '自动拉张缆',
+    <Wire />,
+    {
+      foreColor: 'blue',
+      style: { width: '600px', height: '600px' }
     }
   )
 
@@ -98,7 +110,8 @@ const App = () => {
                     onUseItem={openCircleGenerator} />
           <ItemIcon iconSize={48}
                     icon={accessibilityImageUrl}
-                    text="拉张缆" />
+                    text="拉张缆"
+                    onUseItem={openWireMaker} />
           <ItemIcon iconSize={48}
                     icon={jscriptImageUrl}
                     text="JScript"

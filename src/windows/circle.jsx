@@ -169,7 +169,7 @@ const Circle = () => {
     }
 
     const shipString = ship(partDescription, circleParts)
-    const blob = new Blob([shipString], {type: "text/plain;charset=utf-8"});
+    const blob = new Blob([shipString], { type: 'text/plain;charset=utf-8' })
     saveAs(blob, `${partName}.na`)
   }
 
