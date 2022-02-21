@@ -6,6 +6,14 @@ import Button from '../chui-components/button.jsx'
 import { typeAssert } from '../util/type-assert'
 import shipSaveAssertion from '../util/ship-save-assertion'
 
+const makeWire = ({ x0, y0, z0 }, { x1, y1, z1 }) => {
+  const x = (x0 + x1) / 2
+  const y = (y0 + y1) / 2
+  const z = (z0 + z1) / 2
+
+  const wireLength = Math.sqrt(x * x + y * y + z * z)
+}
+
 const Wire = () => {
   const [color, setColor] = useState('black')
   const [text, setText] = useState(null)
