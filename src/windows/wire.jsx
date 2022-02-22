@@ -20,7 +20,7 @@ const makeWire = ({ x: x0, y: y0, z: z0 }, { x: x1, y: y1, z: z1 }) => {
 
   const wireLength = Math.sqrt(square(dx) + square(dy) + square(dz))
 
-  const angleY = Math.atan(dx / dz)
+  const angleY = radToDeg(Math.atan(dx / dz))
   const angleX = radToDeg((() => {
     if (dx === 0) {
       return (dy * dz < 0 ? 1 : -1) * Math.atan(Math.abs(dy) / Math.sqrt(square(dx) + square(dz)))
