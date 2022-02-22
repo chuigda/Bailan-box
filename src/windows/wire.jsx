@@ -6,12 +6,41 @@ import Button from '../chui-components/button.jsx'
 import { typeAssert } from '../util/type-assert'
 import shipSaveAssertion from '../util/ship-save-assertion'
 
-const makeWire = ({ x0, y0, z0 }, { x1, y1, z1 }) => {
+const radToDeg = rad => (rad * 180) / Math.PI
+const square = x => x * x
+
+const makeWire = ({ x: x0, y: y0, z: z0 }, { x: x1, y: y1, z: z1 }) => {
   const x = (x0 + x1) / 2
   const y = (y0 + y1) / 2
   const z = (z0 + z1) / 2
 
-  const wireLength = Math.sqrt(x * x + y * y + z * z)
+  const dx = x1 - x0
+  const dy = y1 - y0
+  const dz = z1 - z0
+
+  const wireLength = Math.sqrt(square(dx) + square(dy) + square(dz))
+
+  const angleY = Math.atan(dx / dz)
+  const angleX = radToDeg((() => {
+    if (dx === 0) {
+      return (dy * dz < 0 ? 1 : -1) * Math.atan(Math.abs(dy) / Math.sqrt(square(dx) + square(dz)))
+    } else if (dz === 0) {
+      return (dx * dy < 0 ? 1 : -1) * Math.atan(Math.abs(dy) / Math.sqrt(square(dx) + square(dz)))
+    } else if (dx * dy > 0) {
+      return (dx * dz < 0 ? 1 : -1) * Math.atan(Math.abs(dy) / Math.sqrt(square(dx) + square(dz)))
+    } else {
+      return (dy * dz < 0 ? 1 : -1) * Math.atan(Math.abs(dy) / Math.sqrt(square(dx) + square(dz)))
+    }
+  })())
+
+  return {
+    x,
+    y,
+    z,
+    angleX,
+    angleY,
+    wireLength
+  }
 }
 
 const Wire = () => {
