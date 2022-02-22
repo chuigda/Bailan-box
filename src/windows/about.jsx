@@ -33,6 +33,7 @@ const About = () => (
         <li>WHF</li>
         <li>Moskau/AwayOfaLife</li>
         <li>8ig</li>
+        <li>eig</li>
       </ul>
     </div>
     <br />

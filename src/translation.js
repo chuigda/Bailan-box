@@ -14,7 +14,9 @@ export default {
       control_point: 'Control Point',
 
       radius: 'Radius',
-      thickness: 'Thickness'
+      thickness: 'Thickness',
+      download_save_xml: 'Download Save XML',
+      download_custom_part_zip: 'Download Part ZIP'
     }
   },
   zh_CN: {
@@ -32,7 +34,9 @@ export default {
       control_point: '控制点',
 
       radius: '半径',
-      thickness: '厚度'
+      thickness: '厚度',
+      download_save_xml: '下载存档XML',
+      download_custom_part_zip: '下载自定义零件 ZIP'
     }
   },
   zh_TW: {
@@ -50,7 +54,9 @@ export default {
       control_point: '控制點',
 
       radius: '半徑',
-      thickness: '厚度'
+      thickness: '厚度',
+      download_save_xml: '下載存檔XML',
+      download_custom_part_zip: '下載自定義零件 ZIP'
     }
   }
 }
