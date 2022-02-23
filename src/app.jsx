@@ -10,9 +10,10 @@ import { getGlobalColor } from './chui-config/color'
 
 import JSEval from './windows/js-eval.jsx'
 import Bow from './windows/bow.jsx'
-import About from './windows/about.jsx'
 import Circle from './windows/circle.jsx'
 import Wire from './windows/wire.jsx'
+import InternetExplorer from './windows/internet-explorer.jsx'
+import About from './windows/about.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
@@ -20,6 +21,7 @@ import accessibilityImageUrl from './chui-res/icons/accessibility-2.png'
 import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
 import worldImageUrl from './chui-res/icons/world-2.png'
+import msieImageUrl from './chui-res/icons/msie1-2.png'
 
 const allowDrop = event => {
   event.preventDefault()
@@ -60,6 +62,17 @@ const App = () => {
     {
       foreColor: 'blue',
       style: { width: '600px', height: '600px' }
+    }
+  )
+
+  const openMSIE = windowManagerContext => createWindow(
+    windowManagerContext,
+    null,
+    'Internet Explorer',
+    <InternetExplorer />,
+    {
+      foreColor: 'blue',
+      style: { width: '800px', height: '600px' }
     }
   )
 
@@ -112,6 +125,10 @@ const App = () => {
                     icon={accessibilityImageUrl}
                     text="拉张缆"
                     onUseItem={openWireMaker} />
+          <ItemIcon iconSize={48}
+                    icon={msieImageUrl}
+                    text="Internet"
+                    onUseItem={openMSIE} />
           <ItemIcon iconSize={48}
                     icon={jscriptImageUrl}
                     text="JScript"
