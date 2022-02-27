@@ -30,14 +30,19 @@ const allowDrop = event => {
 const App = () => {
   const [windowList, setWindowList] = useState([])
 
-  const openBowGenerator = windowManagerContext => createWindow(
+  const unimplemented = windowManagerContext => createWindow(
     windowManagerContext,
     null,
-    '舰艏自动摆',
-    <Bow />,
+    '未实现',
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>Chuigda 还没有做完这个功能</div>,
     {
       foreColor: 'blue',
-      style: { width: '1152px', height: '864px' }
+      style: { width: '240px', height: '160px' }
     }
   )
 
@@ -103,7 +108,7 @@ const App = () => {
           <ItemIcon iconSize={48}
                     icon={toolFolderImageUrl}
                     text="摆舰艏"
-                    onUseItem={openBowGenerator} />
+                    onUseItem={unimplemented} />
           <ItemIcon iconSize={48}
                     icon={displayPropertiesImageUrl}
                     text="摆圆弧"
@@ -118,7 +123,8 @@ const App = () => {
                     onUseItem={openJscriptEval} />
           <ItemIcon iconSize={48}
                     icon={worldImageUrl}
-                    text="语言" />
+                    text="语言"
+                    onUseItem={unimplemented}/>
           <ItemIcon iconSize={48}
                     icon={helpBookImageUrl}
                     text="关于"

@@ -19,7 +19,7 @@ const About = () => (
     <span style={{ alignSelf: 'center' }}>NavalArt 摆烂盒子</span>
     <span style={{ alignSelf: 'center' }}>by Chuigda WhiteGive (第七漂浮物建造厂)</span>
     <br/>
-    <span>本程序用于快速生成 NavalArt 中的舰艏与 24 段圆弧，非常适合<del>摆烂</del>大量下饺子。一定程度上来说就是一个高级点的 PTB 辅助设计。</span>
+    <span>本程序用于快速生成 NavalArt 中的张缆与 24 段圆弧，希望以此赋予每个人内卷的能力。而当所有人都在内卷，就不存在内卷和摆烂的区别了。</span>
     <br/>
     <span>本程序是开源软件，访问 <a href="https://github.com/chuigda/Bailan-box">github.com/chuigda/Bailan-box</a> 来获取源代码。</span>
     <br />
