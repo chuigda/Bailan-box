@@ -81,7 +81,7 @@ const App = () => {
     <About />,
     {
       foreColor: 'blue',
-      style: { width: '480px', height: '400px' }
+      style: { width: '640px', height: '800px' }
     }
   )
 

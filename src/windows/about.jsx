@@ -2,6 +2,10 @@
 
 import React from 'react'
 import ScrollArea from '../chui-components/scroll-area.jsx'
+import TextArea from '../chui-components/text-area.jsx'
+
+// eslint-disable-next-line import/extensions,import/no-unresolved
+import license from '../../LICENSE?raw'
 
 const About = () => (
   <ScrollArea style={{
@@ -40,15 +44,7 @@ const About = () => (
     <hr style={{ width: '100%' }}/>
     <span style={{ alignSelf: 'center' }}>许可证</span>
     <br/>
-    <span>MIT License</span>
-    <br />
-    <span>Copyright 2022 Chuigda WhiteGive&lt;icey@icey.tech&gt;</span>
-    <br />
-    <span>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</span>
-    <br />
-    <span>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
-    <br />
-    <span>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+    <TextArea style={{ border: '0px none', minHeight: '400px' }} value={license} readOnly />
     <br />
     <hr style={{ width: '100%' }}/>
     <span>程序使用了以下第三方开源软件：</span>
