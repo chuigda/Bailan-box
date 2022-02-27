@@ -121,7 +121,7 @@ const connectWires = (locators, wireRadius) => {
 const Wire = () => {
   const [color, setColor] = useState('black')
   const [text, setText] = useState(null)
-  const [lineRadius, setLineRadius] = useState('0.01')
+  const [lineRadius, setLineRadius] = useState('0.001')
 
   const downloadLocator = () => {
     saveAs(locator, 'locator.zip')
@@ -138,7 +138,7 @@ const Wire = () => {
 
   const [processResult, resultText] = useMemo(() => {
     const lineRadiusNum = parseFloat(lineRadius)
-    if (Number.isNaN(lineRadiusNum) || lineRadiusNum < 0.001) {
+    if (Number.isNaN(lineRadiusNum) || lineRadiusNum < 0.0005) {
       setColor('red')
       return ['', '请输入正确的半径']
     }
@@ -243,9 +243,9 @@ const Wire = () => {
         <LineEdit valueState={[lineRadius, setLineRadius]} style={{ width: '160px' }} />
         <Slider valueState={[lineRadius, setLineRadius]}
                 style={{ width: '160px' }}
-                min={0.001}
+                min={0.0005}
                 max={10.0}
-                step={0.001}
+                step={0.0005}
         />
       </div>
       <TextArea scroll="y" value={resultText} readOnly style={{
