@@ -15,7 +15,8 @@ export default [
           {
             part: ['object'],
             ':@': {
-              id: 'string'.chainWith(intString)
+              id: 'string'.chainWith(intString),
+              modname: 'string?'.sumWith('undefined')
             }
           }
         ],

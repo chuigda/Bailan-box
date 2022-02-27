@@ -59,7 +59,7 @@ const App = () => {
     <Wire />,
     {
       foreColor: 'blue',
-      style: { width: '600px', height: '600px' }
+      style: { width: '800px', height: '640px' }
     }
   )
 

@@ -1,10 +1,18 @@
 import React, { useMemo, useState } from 'react'
-import { XMLParser } from 'fast-xml-parser'
+import { XMLParser, XMLBuilder } from 'fast-xml-parser'
+import { saveAs } from 'file-saver'
+import _ from 'lodash'
 
-import ScrollArea from '../chui-components/scroll-area.jsx'
+import TextArea from '../chui-components/text-area.jsx'
 import Button from '../chui-components/button.jsx'
+import LineEdit from '../chui-components/line-edit.jsx'
+import Slider from '../chui-components/slider.jsx'
 import { typeAssert } from '../util/type-assert'
 import shipSaveAssertion from '../util/ship-save-assertion'
+
+// eslint-disable-next-line import/no-unresolved
+import locator from '../resc/locator.zip.base64?raw'
+import { adjustableHullObject } from '../util/part'
 
 const radToDeg = rad => (rad * 180) / Math.PI
 const square = x => x * x
@@ -43,9 +51,82 @@ const makeWire = ({ x: x0, y: y0, z: z0 }, { x: x1, y: y1, z: z1 }) => {
   }
 }
 
+const extractParts = shipSaveObject => {
+  const partArray = shipSaveObject[0].root[0].ship
+  const shipAttr = shipSaveObject[0].root[0][':@']
+
+  const nonLocatorParts = []
+  const locators = []
+
+  for (const part of partArray) {
+    const partAttr = part[':@']
+    if (partAttr.modname === 'locator.namod') {
+      const { 0: partPosition, 3: partColor, 4: partArmor } = part.part
+      locators.push({
+        x: parseFloat(partPosition[':@'].x),
+        y: parseFloat(partPosition[':@'].y),
+        z: parseFloat(partPosition[':@'].z),
+        color: partColor[':@'].hex,
+        armor: parseFloat(partArmor[':@'].value)
+      })
+    } else {
+      nonLocatorParts.push(part)
+    }
+  }
+
+  return { shipAttr, nonLocatorParts, locators }
+}
+
+const connectWires = (locators, wireRadius) => {
+  const sortedLocators = _.sortBy(locators, ['color', 'armor'])
+  const wires = []
+  const wireTexts = []
+
+  for (let i = 0; i < sortedLocators.length - 1; i++) {
+    const thisElement = sortedLocators[i]
+    const nextElement = sortedLocators[i + 1]
+
+    if (thisElement.color !== nextElement.color) {
+      continue
+    }
+
+    const {
+      x, y, z, angleX, angleY, wireLength
+    } = makeWire(thisElement, nextElement)
+
+    const wire = adjustableHullObject({
+      length: wireLength,
+      height: wireRadius * 2,
+      frontWidth: wireRadius * 2,
+      backWidth: wireRadius * 2,
+      frontSpread: 0,
+      backSpread: 0,
+      upCurve: 1,
+      downCurve: 1,
+      position: { x, y, z },
+      rotation: { x: angleX, y: angleY, z: 0 }
+    })
+
+    wires.push(wire)
+    wireTexts.push(
+      `将会在 (${thisElement.x}, ${thisElement.y}, ${thisElement.z}) `
+      + `和 (${nextElement.x}, ${nextElement.y}, ${nextElement.z}) 之间创建`
+      + `长度为 ${wireLength} 的张缆`
+    )
+  }
+
+  return [wires, wireTexts]
+}
+
 const Wire = () => {
   const [color, setColor] = useState('black')
   const [text, setText] = useState(null)
+  const [lineRadius, setLineRadius] = useState('0.01')
+
+  const downloadLocator = () => {
+    saveAs(locator, 'locator.zip')
+  }
+
   const onFileChosen = event => {
     event.preventDefault()
     const reader = new FileReader()
@@ -56,6 +137,17 @@ const Wire = () => {
   }
 
   const [processResult, resultText] = useMemo(() => {
+    const lineRadiusNum = parseFloat(lineRadius)
+    if (Number.isNaN(lineRadiusNum) || lineRadiusNum < 0.001) {
+      setColor('red')
+      return ['', '请输入正确的半径']
+    }
+
+    if (lineRadiusNum >= 10) {
+      setColor('red')
+      return ['', '太大了，不行！']
+    }
+
     if (!text || text.length === 0) {
       return ['', '选择一个文件以开始处理']
     }
@@ -66,18 +158,50 @@ const Wire = () => {
       attributeNamePrefix: ''
     })
     const object = parser.parse(text)
+
     try {
       typeAssert(object, shipSaveAssertion)
     } catch (assertionFailure) {
       setColor('red')
-      return ['', assertionFailure]
+      return ['', `解析XML失败：\n\t${assertionFailure}`]
     }
 
-    setColor('black')
-    return ['', '没有需要显示的内容']
-  }, [text])
+    const { shipAttr, nonLocatorParts, locators } = extractParts(object)
+    if (locators.length <= 1) {
+      setColor('red')
+      return ['', '没有找到至少两个位置标定器']
+    }
 
-  const downloadProcessedSave = () => {}
+    const [wires, wireTexts] = connectWires(locators, lineRadius)
+    const shipObject = [{
+      root: [
+        {
+          ship: [
+            ...nonLocatorParts,
+            ...wires
+          ],
+          ':@': shipAttr
+        }
+      ]
+    }]
+
+    // re-serialize it back
+    const builder = new XMLBuilder({
+      preserveOrder: true,
+      ignoreAttributes: false,
+      attributeNamePrefix: ''
+    })
+    const shipText = builder.build(shipObject)
+    console.log(shipText)
+
+    setColor('black')
+    return [shipText, wireTexts.join('\n')]
+  }, [text, lineRadius])
+
+  const downloadProcessedSave = () => {
+    const blob = new Blob([processResult], { type: 'text/plain;charset=utf-8' })
+    saveAs(blob, 'ship.na')
+  }
 
   return (
     <div style={{
@@ -92,6 +216,10 @@ const Wire = () => {
         columnGap: '8px',
         justifyItems: 'center'
       }}>
+        <Button onClick={downloadLocator}
+                style={{ width: '160px' }}>
+          下载 Locator
+        </Button>
         <div className="custom-file-upload-div" style={{ width: '160px' }}>
           <label className="custom-file-upload">
             <input type="file" onChange={onFileChosen} />
@@ -99,19 +227,34 @@ const Wire = () => {
           </label>
         </div>
         <Button disabled={!processResult}
+                busy={!processResult}
                 onClick={downloadProcessedSave}
                 style={{ width: '160px' }}>
           下载处理后的存档
         </Button>
       </div>
-      <ScrollArea scroll="y" style={{
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        columnGap: '8px',
+        justifyItems: 'center'
+      }}>
+        <span style={{ marginTop: '2px' }}>半径</span>
+        <LineEdit valueState={[lineRadius, setLineRadius]} style={{ width: '160px' }} />
+        <Slider valueState={[lineRadius, setLineRadius]}
+                style={{ width: '160px' }}
+                min={0.001}
+                max={10.0}
+                step={0.001}
+        />
+      </div>
+      <TextArea scroll="y" value={resultText} readOnly style={{
         border: '1px solid',
         flexGrow: '1',
         flexBasis: '450px',
         padding: '2px'
       }} foreColor={color}>
-        { resultText }
-      </ScrollArea>
+      </TextArea>
       <div style={{ border: '1px solid black', padding: '2px' }}>
         All your data will be processed locally, without being uploaded to anywhere.
         <br/>
