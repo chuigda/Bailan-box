@@ -5,9 +5,6 @@ import React from 'react'
 import ScrollArea from '../chui-components/scroll-area.jsx'
 import TextArea from '../chui-components/text-area.jsx'
 
-// eslint-disable-next-line import/extensions,import/no-unresolved
-import license from '../../LICENSE?raw'
-
 const About = () => (
   <ScrollArea style={{
     width: '100%',
@@ -19,9 +16,9 @@ const About = () => (
     <span style={{ alignSelf: 'center' }}>NavalArt 摆烂盒子</span>
     <span style={{ alignSelf: 'center' }}>by Chuigda WhiteGive (第七漂浮物建造厂)</span>
     <br/>
-    <span>本程序用于快速生成 NavalArt 中的舰艏与 24 段圆弧，非常适合<del>摆烂</del>大量下饺子。一定程度上来说就是一个高级点的 PTB 辅助设计。</span>
+    <span>本程序用于快速生成 NavalArt 中的张缆与 24 段圆弧，希望以此赋予每个人内卷的能力。<del>而当所有人都在内卷，就不存在内卷和摆烂的区别了。</del><i>大佬只会变得更卷</i></span>
     <br/>
-    <span>本程序是开源软件，访问 <a href="https://github.com/chuigda/Bailan-box">github.com/chuigda/Bailan-box</a> 来获取源代码。</span>
+    <span>由于某些原因，本程序源代码不再开放。如有研究或学习需要请联系 Chuigda WhiteGive 获取部分源代码。</span>
     <br />
     <hr style={{ width: '100%' }} />
     <span style={{ alignSelf: 'center' }}>致谢 (排名不分先后)</span>
@@ -41,11 +38,6 @@ const About = () => (
         <li>eig</li>
       </ul>
     </div>
-    <br />
-    <hr style={{ width: '100%' }}/>
-    <span style={{ alignSelf: 'center' }}>许可证</span>
-    <br/>
-    <TextArea style={{ border: '0px none', minHeight: '400px' }} value={license} readOnly />
     <br />
     <hr style={{ width: '100%' }}/>
     <span>程序使用了以下第三方开源软件：</span>
