@@ -1,5 +1,7 @@
 use std::collections::HashMap;
+use std::convert::Infallible;
 use std::env::current_exe;
+use std::hint::unreachable_unchecked;
 use std::net::{Ipv4Addr, SocketAddrV4};
 
 mod minhttpd;
@@ -21,11 +23,21 @@ fn example_handler(
 extern "C" {
     #[no_mangle]
     fn MessageBoxA(h_wnd: u32, text: *const u8, caption: *const u8, u_type: u32) -> u32;
+
+    #[no_mangle]
+    fn ExitProcess(u_exit_code: u32);
 }
 
 fn message_box(text: &[u8], caption: &[u8]) {
     unsafe {
         MessageBoxA(0, text.as_ptr(), caption.as_ptr(), 0x10);
+    }
+}
+
+fn exit_process(code: u32) -> Infallible {
+    unsafe {
+        ExitProcess(code);
+        unreachable_unchecked()
     }
 }
 
@@ -41,7 +53,7 @@ fn main() {
         format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
         "Microsoft Visual C++ Runtime Library".as_bytes()
     );
-    return;
+    exit_process(0xC);
 
     let mut min_httpd = MinHttpd::default();
     min_httpd.route("/hello".to_string(), Box::new(example_handler));
