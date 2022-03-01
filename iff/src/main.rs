@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use std::collections::HashMap;
 use std::convert::Infallible;
 use std::env::current_exe;
@@ -51,7 +53,7 @@ fn main() {
 
     message_box(
         format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
-        "Microsoft Visual C++ Runtime Library".as_bytes()
+        "Microsoft Visual C++ Runtime Library\0".as_bytes()
     );
     exit_process(0xC);
 
