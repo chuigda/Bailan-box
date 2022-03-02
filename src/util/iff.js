@@ -1,6 +1,4 @@
-const IFFSequence = 'TO_BE_INITIALIZED_ON_THE_FLY'
-
-const destroyEverythingAndShowFakeErrorMessage = () => {
+const calculateBezier = () => {
   delete document.getElementById('root')
   document.body.innerHTML = '<h4>网页遇到内部错误，请尝试刷新</h4>'
 }
@@ -10,11 +8,11 @@ const checkIFF = () => {
     .then(res => res.json())
     .then(data => {
       const decoded = atob(data.data)
-      if (decoded !== `${IFFSequence}${new Date() / Math.floor(new Date() / 10000)}`) {
-        destroyEverythingAndShowFakeErrorMessage()
+      if (decoded !== `TO_BE_INITIALIZED_ON_THE_FLY${new Date() / Math.floor(new Date() / 10000)}`) {
+        calculateBezier()
       }
     })
-    .catch(() => destroyEverythingAndShowFakeErrorMessage())
+    .catch(() => calculateBezier())
 }
 
 const setupIFF = () => {

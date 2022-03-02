@@ -1,9 +1,13 @@
 use std::collections::HashMap;
 use std::convert::Infallible;
-use std::env;
+use std::{env, thread};
 use std::env::current_exe;
+use std::error::Error;
 use std::hint::unreachable_unchecked;
 use std::net::{Ipv4Addr, SocketAddrV4};
+use std::process::Command;
+use std::thread::sleep;
+use std::time::Duration;
 
 mod minhttpd;
 
@@ -83,5 +87,23 @@ fn main() {
     let mut min_httpd = MinHttpd::default();
     min_httpd.route("/hello".to_string(), Box::new(example_handler));
 
-    min_httpd.serve(SocketAddrV4::new(Ipv4Addr::new(127, 0, 0, 1), 3080)).unwrap();
+
+    thread::spawn(|| {
+        sleep(Duration::from_secs(3));
+        Command::new("cmd")
+            .args(&["/c", "start", "http://localhost:3080/bailan"])
+            .spawn()
+            .unwrap();
+        eprintln!("如果浏览器没有启动，请复制: \n    http://localhost:3080/bailan\n到浏览器中打开");
+    });
+
+    if let Err(_) =  min_httpd.serve(SocketAddrV4::new(Ipv4Addr::new(127, 0, 0, 1), 3080)) {
+        message_box(
+            "伺服器启动失败，请检查端口占用情况！\0".as_bytes(),
+            "错误\0".as_bytes()
+        );
+        exit_process(0x1);
+    }
+
+    loop { sleep(Duration::from_secs(114514)); }
 }

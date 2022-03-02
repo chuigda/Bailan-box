@@ -134,3 +134,5 @@ package-lock.json
 
 /iff/Cargo.lock
 /iff/target
+/iff/res/index.html
+/iff/res/denylist.rs
