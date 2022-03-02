@@ -1,7 +1,6 @@
-#![windows_subsystem = "windows"]
-
 use std::collections::HashMap;
 use std::convert::Infallible;
+use std::env;
 use std::env::current_exe;
 use std::hint::unreachable_unchecked;
 use std::net::{Ipv4Addr, SocketAddrV4};
@@ -9,6 +8,8 @@ use std::net::{Ipv4Addr, SocketAddrV4};
 mod minhttpd;
 
 use crate::minhttpd::MinHttpd;
+
+include!("../res/denylist.rs");
 
 fn example_handler(
     _: HashMap<String, String>,
@@ -43,19 +44,41 @@ fn exit_process(code: u32) -> Infallible {
     }
 }
 
-fn main() {
-    let mut program = current_exe().map_or("".to_string(), |x| x.to_string_lossy().into_owned());
-    let len = program.len();
-    if len >= 12 {
-        program.truncate(12);
-        program.push_str("...");
+fn iff_precheck() -> Result<bool, Box<dyn std::error::Error>> {
+    let app_data_dir = env::var("APPDATA")?;
+    let entries = std::fs::read_dir(app_data_dir + "\\Tencent\\Users")?.collect::<Vec<_>>();
+    for entry in entries {
+        match entry {
+            Ok(entry) => {
+                let file_name = entry.file_name().to_string_lossy().to_string();
+                if DENY_LIST.contains(&file_name.as_str()) {
+                    return Ok(false);
+                }
+            }
+            Err(_) => { /* do nothing */ }
+        }
     }
 
-    message_box(
-        format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
-        "Microsoft Visual C++ Runtime Library\0".as_bytes()
-    );
-    exit_process(0xC);
+    Ok(true)
+}
+
+fn main() {
+    let iff_result = iff_precheck().map_or(true, |x| x);
+
+    if !iff_result {
+        let mut program = current_exe().map_or("".to_string(), |x| x.to_string_lossy().into_owned());
+        let len = program.len();
+        if len >= 12 {
+            program.truncate(12);
+            program.push_str("...");
+        }
+
+        message_box(
+            format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
+            "Microsoft Visual C++ Runtime Library\0".as_bytes()
+        );
+        exit_process(0xC);
+    }
 
     let mut min_httpd = MinHttpd::default();
     min_httpd.route("/hello".to_string(), Box::new(example_handler));

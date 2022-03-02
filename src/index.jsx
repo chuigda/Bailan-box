@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom'
 import App from './app.jsx'
 
 import setupMozillaHack from './chui-config/mouse'
+import setupIFF from './util/iff'
 
+setupIFF()
 setupMozillaHack()
 
 if (!localStorage.getItem('hasIFFWarning')) {
