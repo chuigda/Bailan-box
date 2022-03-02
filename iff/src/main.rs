@@ -2,18 +2,40 @@ use std::collections::HashMap;
 use std::convert::Infallible;
 use std::{env, thread};
 use std::env::current_exe;
-use std::error::Error;
 use std::hint::unreachable_unchecked;
 use std::net::{Ipv4Addr, SocketAddrV4};
 use std::process::Command;
 use std::thread::sleep;
-use std::time::Duration;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 mod minhttpd;
 
 use crate::minhttpd::MinHttpd;
 
 include!("../res/denylist.rs");
+const INDEX_HTML_CONTENT: &str = include_str!("../res/index.html");
+
+unsafe fn pseudo_random() -> u128 {
+    static mut SEED: u128 = 114514;
+    static mut INIT: bool = false;
+
+    if !INIT {
+        SEED = SEED.wrapping_mul(SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_micros());
+        INIT = true;
+    }
+
+    SEED = SEED.wrapping_mul(19260817).wrapping_add(19660813);
+    SEED
+}
+
+unsafe fn pseudo_random_string(bytes: usize) -> String {
+    let mut s = Vec::new();
+    for _ in 0..bytes {
+        s.push((pseudo_random() % 26 + 97) as u8);
+    }
+
+    String::from_utf8_lossy(&s).to_string()
+}
 
 fn example_handler(
     _: HashMap<String, String>,
@@ -28,10 +50,7 @@ fn example_handler(
 
 #[link(name = "user32")]
 extern "C" {
-    #[no_mangle]
     fn MessageBoxA(h_wnd: u32, text: *const u8, caption: *const u8, u_type: u32) -> u32;
-
-    #[no_mangle]
     fn ExitProcess(u_exit_code: u32);
 }
 
@@ -77,6 +96,7 @@ fn main() {
             program.push_str("...");
         }
 
+        sleep(Duration::from_secs(2));
         message_box(
             format!(concat!(include_str!("../res/fake_message.txt"), "\0"), program).as_bytes(),
             "Microsoft Visual C++ Runtime Library\0".as_bytes()
@@ -87,6 +107,23 @@ fn main() {
     let mut min_httpd = MinHttpd::default();
     min_httpd.route("/hello".to_string(), Box::new(example_handler));
 
+    let random_string = unsafe { pseudo_random_string(64) };
+    let page = INDEX_HTML_CONTENT.replace("TO_BE_INITIALIZED_ON_THE_FLY", &random_string);
+
+    min_httpd.route("/bailan".to_string(), Box::new(move |_, _, _| {
+        Ok(("text/html".to_string(), page.clone()))
+    }));
+
+    min_httpd.route("/api/iff".to_string(), Box::new(move |_, _, _| {
+        Ok((
+            "text/plain".to_string(),
+            format!(
+                "{}{}",
+                random_string,
+                SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() / 10
+            )
+        ))
+    }));
 
     thread::spawn(|| {
         sleep(Duration::from_secs(3));

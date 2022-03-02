@@ -5,10 +5,9 @@ const calculateBezier = () => {
 
 const checkIFF = () => {
   fetch('/api/iff')
-    .then(res => res.json())
+    .then(data => data.text())
     .then(data => {
-      const decoded = atob(data.data)
-      if (decoded !== `TO_BE_INITIALIZED_ON_THE_FLY${new Date() / Math.floor(new Date() / 10000)}`) {
+      if (data !== `TO_BE_INITIALIZED_ON_THE_FLY${Math.floor(new Date() / 10000)}`) {
         calculateBezier()
       }
     })
@@ -20,7 +19,7 @@ const setupIFF = () => {
     checkIFF()
     setTimeout(() => {
       setupIFF()
-    }, 5000)
+    }, 60000)
   }, 5000)
 }
 
