@@ -32,8 +32,20 @@ export const computeBezier3 = ({ x1, y1 }, { x2, y2 }, { x3, y3 }) => {
   return track
 }
 
-export const computeBezier3Fast = async ([x1, y1], [x2, y2], [x3, y3]) => {
-
+export const computeBezier3Fast = async ([x1, y1], [x2, y2], [x3, y3], step) => {
+  const result = await fetch('/api/bezier', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      control1: { x: x1, y: y1 },
+      control2: { x: x2, y: y2 },
+      end: { x: x3, y: y3 },
+      step
+    })
+  })
+  return await result.json()
 }
 
 export const processTrack = track => {
