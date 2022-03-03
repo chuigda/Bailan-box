@@ -12,7 +12,7 @@ pub type HttpUri = String;
 pub type HttpHeaders = HashMap<String, String>;
 pub type HttpParams = HashMap<String, String>;
 pub type HttpBody = Option<String>;
-pub type HttpResponse = Result<(String, String), String>;
+pub type HttpResponse = Result<(String, String), Box<dyn Error>>;
 
 pub type HttpHandlerFunc = Box<
     dyn Fn(HttpHeaders, HttpParams, HttpBody) -> HttpResponse
@@ -142,7 +142,7 @@ impl MinHttpd {
                 Ok(result) => ("200 Ok", result),
                 Err(e) => {
                     eprintln!("[MIN-HTTPD] Error: {}", e);
-                    ("500 Internal Server Error", ("text/plain".to_string(), e))
+                    ("500 Internal Server Error", ("text/plain".to_string(), format!("{}", e)))
                 }
             };
 

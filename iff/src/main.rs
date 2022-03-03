@@ -7,7 +7,9 @@ use std::net::{Ipv4Addr, SocketAddrV4};
 use std::process::Command;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use crate::bezier::{compute_bezier, compute_bezier_series};
 
+mod bezier;
 mod minhttpd;
 
 use crate::minhttpd::MinHttpd;
@@ -41,7 +43,7 @@ fn example_handler(
     _: HashMap<String, String>,
     params: HashMap<String, String>,
     _: Option<String>
-) -> Result<(String, String), String> {
+) -> Result<(String, String), Box<dyn std::error::Error>> {
     Ok((
         "text/plain".to_string(),
         format!("Hello, {}!", params.get("name").map(|x| x.as_str()).unwrap_or("World"))
@@ -107,12 +109,21 @@ fn main() {
     let mut min_httpd = MinHttpd::default();
     min_httpd.route("/hello".to_string(), Box::new(example_handler));
 
-    let random_string = unsafe { pseudo_random_string(64) };
+    let random_string = if env::var("DEV_MODE").is_ok() {
+        "TO_BE_INITIALIZED_ON_THE_FLY".to_string()
+    } else {
+        unsafe { pseudo_random_string(64) }
+    };
+
     let page = INDEX_HTML_CONTENT.replace("TO_BE_INITIALIZED_ON_THE_FLY", &random_string);
 
     min_httpd.route("/bailan".to_string(), Box::new(move |_, _, _| {
         Ok(("text/html".to_string(), page.clone()))
     }));
+
+    min_httpd.route("/api/bezier".to_string(), Box::new(compute_bezier));
+
+    min_httpd.route("/api/bezierAll".to_string(), Box::new(compute_bezier_series));
 
     min_httpd.route("/api/iff".to_string(), Box::new(move |_, _, _| {
         Ok((

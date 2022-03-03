@@ -5,6 +5,14 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3080',
+        changeOrigin: true,
+      },
+    }
+  },
   resolve: {
     publicDir: 'public',
     alias: {

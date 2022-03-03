@@ -37,6 +37,7 @@ LineEdit.propTypes = {
   backColor: PropTypes.string,
   foreColor: PropTypes.string,
   password: PropTypes.any,
+  initValue: PropTypes.string,
   valueState: PropTypes.array,
   style: PropTypes.object
 }

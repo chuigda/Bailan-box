@@ -32,6 +32,10 @@ export const computeBezier3 = ({ x1, y1 }, { x2, y2 }, { x3, y3 }) => {
   return track
 }
 
+export const computeBezier3Fast = async ([x1, y1], [x2, y2], [x3, y3]) => {
+
+}
+
 export const processTrack = track => {
   for (let i = 0; i < track.length - 1; i++) {
     if (track[i + 1].x < track[i].x) {
