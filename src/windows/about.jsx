@@ -36,36 +36,20 @@ const About = () => (
         <li>Moskau/AwayOfaLife</li>
         <li>8ig</li>
         <li>eig</li>
+        <li>第一次进这个群</li>
       </ul>
     </div>
     <br />
     <hr style={{ width: '100%' }}/>
     <span>程序使用了以下第三方开源软件：</span>
     <br />
-    <span style={{ alignSelf: 'center' }}>React</span>
+    <span style={{ alignSelf: 'center' }}><del>React</del></span>
     <br />
-    <span>MIT License</span>
+    <span><del>MIT License</del></span>
     <br />
-    <span>Copyright (c) Facebook, Inc. and its affiliates.</span>
+    <span><del>Copyright (c) Facebook, Inc. and its affiliates.</del></span>
     <br />
-    <span>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</span>
-    <br />
-    <span>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
-    <br />
-    <span>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
-    <br />
-    <br />
-    <span style={{ alignSelf: 'center' }}>PropTypes</span>
-    <br />
-    <span>MIT License</span>
-    <br />
-    <span>Copyright (c) 2013-present, Facebook, Inc.</span>
-    <br />
-    <span>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</span>
-    <br />
-    <span>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
-    <br />
-    <span>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+    <span>由于 Facebook 和 React 在俄乌冲突问题上为<b>军事化</b>募捐提供渠道，并公开表示支持这些行动，即日起 Bailan-box 不承认且不遵循 React 的开源协议。</span>
     <br />
     <br />
     <span style={{ alignSelf: 'center' }}>i18next</span>
