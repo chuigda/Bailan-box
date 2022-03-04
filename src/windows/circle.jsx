@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'fre'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars,no-eval */
 
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'fre'
 import LineEdit from '../chui-components/line-edit.jsx'
 import Button from '../chui-components/button.jsx'
 import ScrollArea from '../chui-components/scroll-area.jsx'

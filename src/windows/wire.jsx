@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'fre'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
 import { saveAs } from 'file-saver'
 import _ from 'lodash'

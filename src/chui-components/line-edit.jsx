@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'fre'
 
 import { makeColorStyle } from '../chui-config/color'
+import { typeAssert } from '../util/type-assert'
 
 const LineEdit = ({
   inputRef, backColor, foreColor, password, initValue, valueState, style, ...rest
 }) => {
+  typeAssert({
+    backColor: 'string?',
+    foreColor: 'string?',
+    password: 'boolean?',
+    initValue: 'string?',
+    valueState: [].chainWith(x => x.length === 2).orNull(),
+    style: 'object?'
+  })
+
   const editStyle = { ...style, ...makeColorStyle(foreColor, backColor) }
 
   if (valueState) {
@@ -30,16 +39,6 @@ const LineEdit = ({
       />
     )
   }
-}
-
-LineEdit.propTypes = {
-  inputRef: PropTypes.any,
-  backColor: PropTypes.string,
-  foreColor: PropTypes.string,
-  password: PropTypes.any,
-  initValue: PropTypes.string,
-  valueState: PropTypes.array,
-  style: PropTypes.object
 }
 
 export default LineEdit

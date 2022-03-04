@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
-
+import { useContext } from '../chui-utils/fre-plus'
 import { WindowManagerContext } from './window-mgr.jsx'
+import { typeAssert } from '../util/type-assert'
 
 const ItemIcon = ({
   icon,
@@ -9,6 +8,15 @@ const ItemIcon = ({
   text,
   onUseItem
 }) => {
+  typeAssert({
+    icon, iconSize, text, onUseItem
+  }, {
+    icon: 'string',
+    iconSize: 'number',
+    text: 'string',
+    onUseItem: 'function?'
+  })
+
   const windowManagerContext = useContext(WindowManagerContext)
 
   return (
@@ -36,13 +44,6 @@ const ItemIcon = ({
       </div>
     </div>
   )
-}
-
-ItemIcon.propTypes = {
-  icon: PropTypes.string.isRequired,
-  iconSize: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
-  onUseItem: PropTypes.func
 }
 
 export default ItemIcon

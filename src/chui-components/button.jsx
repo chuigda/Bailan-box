@@ -1,11 +1,17 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-
 import { makeColorStyle } from '../chui-config/color'
+import { typeAssert } from '../util/type-assert'
 
 const Button = ({
   backColor, foreColor, help, busy, style, ...rest
 }) => {
+  typeAssert({
+    backColor, foreColor, style
+  }, {
+    backColor: 'string?',
+    foreColor: 'string?',
+    style: 'object?'
+  })
+
   const buttonStyle = {
     userSelect: 'none',
     ...style,
@@ -20,14 +26,6 @@ const Button = ({
       <button className={classes} style={{ width: '100%', ...buttonStyle }} {...rest} />
     </div>
   )
-}
-
-Button.propTypes = {
-  backColor: PropTypes.string,
-  foreColor: PropTypes.string,
-  style: PropTypes.object,
-  help: PropTypes.any,
-  busy: PropTypes.any
 }
 
 export default Button

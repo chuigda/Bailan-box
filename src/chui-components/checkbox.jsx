@@ -1,9 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import { typeAssert } from '../util/type-assert'
 
 const CheckBox = ({
   valueState, style, ...rest
 }) => {
+  typeAssert({
+    valueState, style
+  }, {
+    valueState: [].chainWith(arr => arr.length === 2),
+    style: 'object?'
+  })
+
   const [value, setValue] = valueState
 
   return (
@@ -18,11 +24,6 @@ const CheckBox = ({
            {...rest}
     />
   )
-}
-
-CheckBox.propTypes = {
-  valueState: PropTypes.array.isRequired,
-  style: PropTypes.object
 }
 
 export default CheckBox

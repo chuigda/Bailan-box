@@ -1,11 +1,21 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-
 import { makeColorStyle } from '../chui-config/color'
+import { typeAssert } from '../util/type-assert'
 
 const Table = ({
   key, backColor, foreColor, busy, title, rows, style, ...rest
 }) => {
+  typeAssert({
+    key, backColor, foreColor, busy, title, rows, style
+  }, {
+    key: 'string?',
+    backColor: 'string?',
+    foreColor: 'string?',
+    busy: 'boolean?',
+    title: ['string'].orNull(),
+    rows: [['string']].orNull(),
+    style: 'object?',
+  })
+
   const tableStyle = { ...style, ...makeColorStyle(foreColor, backColor) }
   const classes = 'chui-table'
     + `${busy ? ' chui-cursor-busy' : ''}`
@@ -43,16 +53,6 @@ const Table = ({
       </tbody>
     </table>
   )
-}
-
-Table.propTypes = {
-  key: PropTypes.string,
-  backColor: PropTypes.string,
-  foreColor: PropTypes.string,
-  busy: PropTypes.any,
-  title: PropTypes.arrayOf(PropTypes.string),
-  rows: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-  style: PropTypes.object
 }
 
 export default Table

@@ -1,18 +1,16 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
-import PropTypes from 'prop-types'
+import { useEffect, useRef, useState } from 'fre'
+import { createContext, useContext } from '../chui-utils/fre-plus'
 
 // eslint-disable-next-line import/no-cycle
 import Window from './window.jsx'
 import log from '../chui-utils/log'
+import { typeAssert } from '../util/type-assert'
 
-export const WindowManagerContext = React.createContext(null)
+export const WindowManagerContext = createContext(null)
 
 export const WindowManager = ({ children }) => {
+  typeAssert(children, [].orNull())
+
   const [windowList, setWindowList] = useState({
     list: []
   })
@@ -44,12 +42,6 @@ export const WindowManager = ({ children }) => {
       }
     </WindowManagerContext.Provider>
   )
-}
-
-WindowManager.propTypes = {
-  windowList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setWindowList: PropTypes.func.isRequired,
-  children: PropTypes.any
 }
 
 export const createWindow = (windowManagerContext, hWnd, title, children, restAttr) => {
@@ -169,6 +161,11 @@ export const setWindowVisibility = (windowManagerContext, hWnd, visible) => {
 export const CreateWindow = ({
   hWnd, title, children, ...rest
 }) => {
+  typeAssert({ hWnd, title }, {
+    hWnd: 'string?',
+    title: 'string'
+  })
+
   const windowManagerContext = useContext(WindowManagerContext)
 
   useEffect(() => {
@@ -177,10 +174,4 @@ export const CreateWindow = ({
   }, [])
 
   return <></>
-}
-
-CreateWindow.propTypes = {
-  hWnd: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.any
 }

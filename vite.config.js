@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { defineConfig } from 'vite'
-import reactRefresh from '@vitejs/plugin-react-refresh'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
 export default defineConfig({
@@ -20,9 +19,7 @@ export default defineConfig({
       '@components': './src/components'
     }
   },
-  plugins: [
-    reactRefresh(), viteSingleFile()
-  ],
+  plugins: [viteSingleFile()],
   css: {
     preprocessorOptions: {
       less: {
@@ -43,4 +40,11 @@ export default defineConfig({
       },
     },
   },
+  esbuild: {
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment',
+    jsxInject: 'import { h, Fragment } from \'fre\'',
+    target: 'es2020',
+    format: 'esm'
+  }
 })

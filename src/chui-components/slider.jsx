@@ -1,9 +1,20 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect } from 'fre'
+import { typeAssert } from '../util/type-assert'
 
 const Slider = ({
   min, max, step, valueState, autoCorrect, style, ...rest
 }) => {
+  typeAssert({
+    min, max, step, valueState, autoCorrect, style
+  }, {
+    min: 'number',
+    max: 'number',
+    step: 'number?',
+    valueState: 'number',
+    autoCorrect: 'boolean?',
+    style: 'object?'
+  })
+
   const [value, setValue] = valueState
 
   useEffect(() => {
@@ -41,15 +52,6 @@ const Slider = ({
            {...rest}
     />
   )
-}
-
-Slider.propTypes = {
-  min: PropTypes.any.isRequired,
-  max: PropTypes.any.isRequired,
-  valueState: PropTypes.array.isRequired,
-  autoCorrect: PropTypes.bool,
-  style: PropTypes.object,
-  step: PropTypes.number,
 }
 
 export default Slider

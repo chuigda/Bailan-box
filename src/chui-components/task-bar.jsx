@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
+import { useContext } from '../chui-utils/fre-plus'
 
 import { setWindowVisibility, WindowManagerContext } from './window-mgr.jsx'
 import { makeColorStyle } from '../chui-config/color'
 import Button from './button.jsx'
 
 import showDesktopImageUrl from '../chui-res/icons/desktop_old-3.png'
+import { typeAssert } from '../util/type-assert'
 
 const TaskBar = ({
   foreColor,
@@ -13,6 +13,15 @@ const TaskBar = ({
   activeForeColor,
   activeBackColor
 }) => {
+  typeAssert({
+    foreColor, backColor, activeForeColor, activeBackColor
+  }, {
+    foreColor: 'string?',
+    backColor: 'string',
+    activeForeColor: 'string?',
+    activeBackColor: 'string'
+  })
+
   const windowManagerContext = useContext(WindowManagerContext)
   const { windowList } = windowManagerContext
   const sorted = [...windowList.list].sort(
@@ -70,13 +79,6 @@ const TaskBar = ({
       }
     </div>
   )
-}
-
-TaskBar.propTypes = {
-  foreColor: PropTypes.string,
-  backColor: PropTypes.string.isRequired,
-  activeForeColor: PropTypes.string,
-  activeBackColor: PropTypes.string.isRequired
 }
 
 export default TaskBar

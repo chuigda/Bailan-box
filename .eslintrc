@@ -1,7 +1,6 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
     "airbnb-base"
   ],
   "env": {
@@ -24,14 +23,7 @@
     "import/prefer-default-export": "off",
     "no-plusplus": "off"
   },
-  "settings": {
-    "react": {
-      "pragma": "React",
-      "fragment": "Fragment",
-      "version": "detect",
-      "flowVersion": "0.53"
-    }
-  },
+  "settings": {},
   "ignorePatterns": [
     "mock/*"
   ]

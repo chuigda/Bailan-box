@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'fre'
+
 import LineEdit from '../chui-components/line-edit.jsx'
 import Button from '../chui-components/button.jsx'
 

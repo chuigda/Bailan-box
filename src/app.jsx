@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'fre'
 
 import './chui-style.css'
 import './style.css'
@@ -102,7 +102,7 @@ const App = () => {
     <div className="app"
          onDragOver={allowDrop}
          style={{ width: '100%', height: '100%', backgroundColor: getGlobalColor().colorPlate.cyan }}>
-      <WindowManager windowList={windowList} setWindowList={setWindowList}>
+      <WindowManager>
         <div style={{
           position: 'absolute',
           left: 4,

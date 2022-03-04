@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect, useRef } from 'fre'
+import { typeAssert } from '../util/type-assert'
 
 const Canvas = ({
   paintFunction,
@@ -9,6 +9,16 @@ const Canvas = ({
   canvasRef,
   ...rest
 }) => {
+  typeAssert({
+    paintFunction, width, height, style, canvasRef
+  }, {
+    paintFunction: 'function',
+    width: 'number',
+    height: 'number',
+    style: 'object?',
+    canvasRef: 'object?'
+  })
+
   const realWidth = width * 2
   const realHeight = height * 2
   const ref = canvasRef || useRef()
@@ -32,14 +42,6 @@ const Canvas = ({
             {...rest}
     />
   )
-}
-
-Canvas.propTypes = {
-  paintFunction: PropTypes.func.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  canvasRef: PropTypes.object,
-  style: PropTypes.object
 }
 
 export default Canvas

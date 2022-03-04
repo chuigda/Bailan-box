@@ -1,10 +1,5 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
-import PropTypes from 'prop-types'
+import { useEffect, useRef, useState } from 'fre'
+import { useContext } from '../chui-utils/fre-plus'
 
 import { makeColorStyle } from '../chui-config/color'
 import Button from './button.jsx'
@@ -16,6 +11,7 @@ import {
   setWindowVisibility
 } from './window-mgr.jsx'
 import log from '../chui-utils/log'
+import { typeAssert } from '../util/type-assert'
 
 const makeTitleBar = (
   windowRef,
@@ -164,6 +160,21 @@ const Window = ({
   style,
   ...rest
 }) => {
+  typeAssert({
+    hWnd, pos, visible, backColor, foreColor, title, style
+  }, {
+    hWnd: 'string',
+    title: 'string',
+    pos: {
+      x: 'number',
+      y: 'number'
+    }.orNull(),
+    visible: 'boolean?',
+    backColor: 'string?',
+    foreColor: 'string?',
+    style: 'object?'
+  })
+
   useEffect(() => log.debug(`re-generating vdom for Window ${hWnd}`))
 
   const classes = 'chui-window'
@@ -214,18 +225,6 @@ const Window = ({
       </div>
     </div>
   )
-}
-
-Window.propTypes = {
-  hWnd: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  pos: PropTypes.object,
-  windowApi: PropTypes.object,
-  visible: PropTypes.bool,
-  backColor: PropTypes.string,
-  foreColor: PropTypes.string,
-  children: PropTypes.any,
-  style: PropTypes.object
 }
 
 export default Window

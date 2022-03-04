@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useState } from 'react'
+import { useState } from 'fre'
 import Canvas from '../components/canvas.jsx'
 import LineEdit from '../chui-components/line-edit.jsx'
 import Slider from '../chui-components/slider.jsx'
