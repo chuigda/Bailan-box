@@ -5,7 +5,7 @@ use crate::minhttpd::{HttpBody, HttpHeaders, HttpParams, HttpResponse};
 #[derive(Serialize, Deserialize, Copy, Clone)]
 struct ControlPoint {
     x: f64,
-    y: f64,
+    y: f64
 }
 
 #[derive(Serialize, Deserialize)]
@@ -14,7 +14,7 @@ struct BezierOptions {
     control1: ControlPoint,
     control2: ControlPoint,
     end: ControlPoint,
-    step: f64,
+    step: f64
 }
 
 pub fn compute_bezier(_: HttpHeaders, _: HttpParams, body: HttpBody) -> HttpResponse {
@@ -95,3 +95,5 @@ fn compute_bezier_impl(options: BezierOptions) -> Result<Vec<f64>, Box<dyn std::
 
     Ok(result)
 }
+
+

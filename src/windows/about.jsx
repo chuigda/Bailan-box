@@ -3,7 +3,6 @@
 
 import React from 'react'
 import ScrollArea from '../chui-components/scroll-area.jsx'
-import TextArea from '../chui-components/text-area.jsx'
 
 const About = () => (
   <ScrollArea style={{
