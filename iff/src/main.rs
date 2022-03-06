@@ -1,5 +1,6 @@
 mod bezier;
-mod justice;
+mod files;
+mod liberty;
 mod winapi;
 
 use std::collections::HashMap;
@@ -13,11 +14,8 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use xjbutil::minhttpd::{HttpResponse, MinHttpd};
 
 use crate::bezier::{compute_bezier, compute_bezier_series};
-use crate::justice::{
-    iff_precheck,
-    user_speaks_angliskiy,
-    user_speaks_kitaiskiy
-};
+use crate::files::{mkdir_http_api, save_base64_file, save_text_file};
+use crate::liberty::{iff_precheck, user_speaks_angliskiy, user_speaks_kitaiskiy};
 use crate::winapi::{message_box, exit_process};
 
 const INDEX_HTML_CONTENT: &str = include_str!("../res/index.html");
@@ -100,6 +98,12 @@ fn main() {
 
     min_httpd.route_fn("/api/bezierAll", compute_bezier_series);
 
+    min_httpd.route_fn("/api/saveTextFile", save_text_file);
+
+    min_httpd.route_fn("/api/saveBase64", save_base64_file);
+
+    min_httpd.route_fn("/api/mkdir", mkdir_http_api);
+
     min_httpd.route("/api/iff", Box::new(move |_, _, _| {
         Ok(HttpResponse::builder().set_payload(
             format!(
@@ -120,7 +124,7 @@ fn main() {
             eprintln!("LIBERTY LIBERTY LIBERTY");
 
             loop {
-                sleep(Duration::from_secs(5));
+                sleep(Duration::from_secs(3));
                 let s = unsafe {
                     pseudo_random_string_lossy((pseudo_random() % 512 + 256) as usize)
                 };
