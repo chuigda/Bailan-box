@@ -1,5 +1,4 @@
 mod bezier;
-mod minhttpd;
 mod justice;
 mod winapi;
 
@@ -11,9 +10,14 @@ use std::process::Command;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+use xjbutil::minhttpd::{HttpResponse, MinHttpd};
+
 use crate::bezier::{compute_bezier, compute_bezier_series};
-use crate::justice::{iff_precheck, user_speaks_angliskiy, user_speaks_kitaiskiy, user_speaks_ukrainskiy};
-use crate::minhttpd::MinHttpd;
+use crate::justice::{
+    iff_precheck,
+    user_speaks_angliskiy,
+    user_speaks_kitaiskiy
+};
 use crate::winapi::{message_box, exit_process};
 
 const INDEX_HTML_CONTENT: &str = include_str!("../res/index.html");
@@ -54,11 +58,10 @@ fn example_handler(
     _: HashMap<String, String>,
     params: HashMap<String, String>,
     _: Option<String>
-) -> Result<(String, String), Box<dyn std::error::Error>> {
-    Ok((
-        "text/plain".to_string(),
-        format!("Hello, {}!", params.get("name").map(|x| x.as_str()).unwrap_or("World"))
-    ))
+) -> Result<HttpResponse, Box<dyn std::error::Error>> {
+    Ok(HttpResponse::builder().set_payload(
+        format!("Hello, {}!", params.get("name").unwrap_or(&"world".to_string()))
+    ).build())
 }
 
 fn main() {
@@ -81,7 +84,7 @@ fn main() {
     }
 
     let mut min_httpd = MinHttpd::default();
-    min_httpd.route("/hello".to_string(), Box::new(example_handler));
+    min_httpd.route_fn("/hello", example_handler);
 
     let random_string = if env::var("DEV_MODE").is_ok() {
         "TO_BE_INITIALIZED_ON_THE_FLY".to_string()
@@ -91,23 +94,20 @@ fn main() {
 
     let page = INDEX_HTML_CONTENT.replace("TO_BE_INITIALIZED_ON_THE_FLY", &random_string);
 
-    min_httpd.route("/bailan".to_string(), Box::new(move |_, _, _| {
-        Ok(("text/html".to_string(), page.clone()))
-    }));
+    min_httpd.route_static("/bailan", "text/html", page);
 
-    min_httpd.route("/api/bezier".to_string(), Box::new(compute_bezier));
+    min_httpd.route_fn("/api/bezier", compute_bezier);
 
-    min_httpd.route("/api/bezierAll".to_string(), Box::new(compute_bezier_series));
+    min_httpd.route_fn("/api/bezierAll", compute_bezier_series);
 
-    min_httpd.route("/api/iff".to_string(), Box::new(move |_, _, _| {
-        Ok((
-            "text/plain".to_string(),
+    min_httpd.route("/api/iff", Box::new(move |_, _, _| {
+        Ok(HttpResponse::builder().set_payload(
             format!(
                 "{}{}",
                 random_string,
                 SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() / 10
             )
-        ))
+        ).build())
     }));
 
     let kitaiskiy = user_speaks_kitaiskiy();
@@ -124,7 +124,7 @@ fn main() {
                 let s = unsafe {
                     pseudo_random_string_lossy((pseudo_random() % 512 + 256) as usize)
                 };
-                eprintln!("{}", s);
+                eprint!("{}", s);
             }
         });
     }

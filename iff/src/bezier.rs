@@ -1,6 +1,7 @@
-use serde::{Serialize, Deserialize};
+use std::error::Error;
 
-use crate::minhttpd::{HttpBody, HttpHeaders, HttpParams, HttpResponse};
+use serde::{Serialize, Deserialize};
+use xjbutil::minhttpd::{HttpBody, HttpHeaders, HttpParams, HttpResponse};
 
 #[derive(Serialize, Deserialize, Copy, Clone)]
 struct ControlPoint {
@@ -17,17 +18,22 @@ struct BezierOptions {
     step: f64
 }
 
-pub fn compute_bezier(_: HttpHeaders, _: HttpParams, body: HttpBody) -> HttpResponse {
+pub fn compute_bezier(
+    _: HttpHeaders, _: HttpParams, body: HttpBody
+) -> Result<HttpResponse, Box<dyn Error>> {
     let bezier_options = serde_json::from_str::<BezierOptions>(
         &body.ok_or("unexpected empty body")?
     )?;
-    Ok((
-        "application/json".to_string(),
+    Ok(HttpResponse::builder().set_payload(
         serde_json::to_string(&compute_bezier_impl(bezier_options)?)?
-    ))
+    ).add_header("Content-Type", "application/json").build())
 }
 
-pub fn compute_bezier_series(_: HttpHeaders, _: HttpParams, body: HttpBody) -> HttpResponse {
+pub fn compute_bezier_series(
+    _: HttpHeaders,
+    _: HttpParams,
+    body: HttpBody
+) -> Result<HttpResponse, Box<dyn Error>> {
     let bezier_options = serde_json::from_str::<Vec<BezierOptions>>(
         &body.ok_or("unexpected empty body")?
     )?;
@@ -37,10 +43,9 @@ pub fn compute_bezier_series(_: HttpHeaders, _: HttpParams, body: HttpBody) -> H
         series.push(compute_bezier_impl(bezier_option)?);
     }
 
-    Ok((
-        "application/json".to_string(),
+    Ok(HttpResponse::builder().set_payload(
         serde_json::to_string(&series)?
-    ))
+    ).add_header("Content-Type", "application/json").build())
 }
 
 fn compute_bezier_impl(options: BezierOptions) -> Result<Vec<f64>, Box<dyn std::error::Error>> {

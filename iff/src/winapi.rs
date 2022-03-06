@@ -28,4 +28,3 @@ pub fn exit_process(code: u32) -> Infallible {
         unreachable_unchecked()
     }
 }
-

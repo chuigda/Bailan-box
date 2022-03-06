@@ -30,8 +30,3 @@ pub fn user_speaks_angliskiy() -> bool {
     let language: u32 = get_user_default_ui_language();
     language & 0x09 != 0
 }
-
-pub fn user_speaks_ukrainskiy() -> bool {
-    let language: u32 = get_user_default_ui_language();
-    language & 0x22 != 0
-}
