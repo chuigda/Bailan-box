@@ -9,4 +9,4 @@ edition = "2021"
 base64 = "0.13.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-xjbutil = { version = "0.7.0-DELTA", default-features = false, features = ["minhttpd"]}
+xjbutil = { version = "0.7.0-ECHO", default-features = false, features = ["liberty", "minhttpd", "rand"]}

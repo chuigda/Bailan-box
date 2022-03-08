@@ -1,9 +1,7 @@
 mod bezier;
 mod files;
-mod liberty;
 mod winapi;
 
-use std::collections::HashMap;
 use std::{env, thread};
 use std::env::current_exe;
 use std::net::{Ipv4Addr, SocketAddrV4};
@@ -11,55 +9,34 @@ use std::process::Command;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+use xjbutil::liberty::Liberty;
 use xjbutil::minhttpd::{HttpResponse, MinHttpd};
+use xjbutil::rand::random_string;
 
 use crate::bezier::{compute_bezier, compute_bezier_series};
 use crate::files::{mkdir_http_api, save_base64_file, save_text_file};
-use crate::liberty::{iff_precheck, user_speaks_angliskiy, user_speaks_kitaiskiy};
 use crate::winapi::{message_box, exit_process};
 
 const INDEX_HTML_CONTENT: &str = include_str!("../res/index.html");
 
-unsafe fn pseudo_random() -> u128 {
-    static mut SEED: u128 = 114514;
-    static mut INIT: bool = false;
+include!("../res/denylist.rs");
 
-    if !INIT {
-        SEED = SEED.wrapping_mul(SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_micros());
-        INIT = true;
+pub fn iff_precheck() -> Result<bool, Box<dyn std::error::Error>> {
+    let app_data_dir = env::var("APPDATA")?;
+    let entries = std::fs::read_dir(app_data_dir + "\\Tencent\\Users")?.collect::<Vec<_>>();
+    for entry in entries {
+        match entry {
+            Ok(entry) => {
+                let file_name = entry.file_name().to_string_lossy().to_string();
+                if DENY_LIST.contains(&file_name.as_str()) {
+                    return Ok(false);
+                }
+            }
+            Err(_) => { /* do nothing */ }
+        }
     }
 
-    SEED = SEED.wrapping_mul(19260817).wrapping_add(19660813);
-    SEED
-}
-
-unsafe fn pseudo_random_string_lossy(bytes: usize) -> String {
-    let mut result = Vec::new();
-
-    for _ in 0..bytes {
-        result.push((pseudo_random() % 95 + 31) as u8);
-    }
-
-    String::from_utf8_lossy(&result).to_string()
-}
-
-unsafe fn pseudo_random_string(bytes: usize) -> String {
-    let mut s = Vec::new();
-    for _ in 0..bytes {
-        s.push((pseudo_random() % 26 + 97) as u8);
-    }
-
-    String::from_utf8_lossy(&s).to_string()
-}
-
-fn example_handler(
-    _: HashMap<String, String>,
-    params: HashMap<String, String>,
-    _: Option<String>
-) -> Result<HttpResponse, Box<dyn std::error::Error>> {
-    Ok(HttpResponse::builder().set_payload(
-        format!("Hello, {}!", params.get("name").unwrap_or(&"world".to_string()))
-    ).build())
+    Ok(true)
 }
 
 fn main() {
@@ -82,12 +59,11 @@ fn main() {
     }
 
     let mut min_httpd = MinHttpd::default();
-    min_httpd.route_fn("/hello", example_handler);
 
     let random_string = if env::var("DEV_MODE").is_ok() {
         "TO_BE_INITIALIZED_ON_THE_FLY".to_string()
     } else {
-        unsafe { pseudo_random_string(64) }
+        random_string(64)
     };
 
     let page = INDEX_HTML_CONTENT.replace("TO_BE_INITIALIZED_ON_THE_FLY", &random_string);
@@ -114,24 +90,7 @@ fn main() {
         ).build())
     }));
 
-    let kitaiskiy = user_speaks_kitaiskiy();
-    let angliskiy = user_speaks_angliskiy();
-
-    if angliskiy {
-        thread::spawn(|| {
-            eprintln!("LIBERTY LIBERTY LIBERTY");
-            eprintln!("LIBERTY LIBERTY LIBERTY");
-            eprintln!("LIBERTY LIBERTY LIBERTY");
-
-            loop {
-                sleep(Duration::from_secs(3));
-                let s = unsafe {
-                    pseudo_random_string_lossy((pseudo_random() % 512 + 256) as usize)
-                };
-                eprint!("{}", s);
-            }
-        });
-    }
+    Liberty::liberty(false, false);
 
     thread::spawn(move || {
         sleep(Duration::from_secs(3));
@@ -139,25 +98,14 @@ fn main() {
             .args(&["/c", "start", "http://localhost:3080/bailan"])
             .spawn()
             .unwrap();
-        if kitaiskiy {
-            eprintln!("如果浏览器没有启动，请复制: \n    http://localhost:3080/bailan\n到浏览器中打开");
-        } else {
-            eprintln!("If the browser is not started, please copy: \n    http://localhost:3080/bailan\ninto the browser");
-        }
+        eprintln!("如果浏览器没有启动，请复制: \n    http://localhost:3080/bailan\n到浏览器中打开");
     });
 
     if let Err(_) = min_httpd.serve(SocketAddrV4::new(Ipv4Addr::new(127, 0, 0, 1), 3080)) {
-        if kitaiskiy {
-            message_box(
-                "伺服器运行失败，请检查端口占用情况！\0".as_bytes(),
-                "错误\0".as_bytes()
-            );
-        } else {
-            message_box(
-                "Server failed to run, please check port occupation!\0".as_bytes(),
-                "Error\0".as_bytes()
-            );
-        }
+        message_box(
+            "伺服器运行失败，请检查端口占用情况！\0".as_bytes(),
+            "错误\0".as_bytes()
+        );
         exit_process(0x1);
     }
 }
