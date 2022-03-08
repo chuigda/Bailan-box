@@ -104,3 +104,30 @@ export const customPart = (description, sections, sizeX, sizeY, sizeZ, centerX, 
 ${sections.reduce((x, y) => `${x}\n${y}`, '')}
   </customPart>
 </root>`
+
+export const extractParts = shipSaveObject => {
+  const partArray = shipSaveObject[0].root[0].ship
+  const shipAttr = shipSaveObject[0].root[0][':@']
+
+  const nonLocatorParts = []
+  const locators = []
+
+  for (const part of partArray) {
+    const partAttr = part[':@']
+    if (partAttr.modname === 'locator.namod') {
+      const { 0: partPosition, 3: partColor, 4: partArmor } = part.part
+      locators.push({
+        x: parseFloat(partPosition[':@'].x),
+        y: parseFloat(partPosition[':@'].y),
+        z: parseFloat(partPosition[':@'].z),
+        color: partColor[':@'].hex,
+        armor: parseFloat(partArmor[':@'].value)
+      })
+    } else {
+      nonLocatorParts.push(part)
+    }
+  }
+
+  return { shipAttr, nonLocatorParts, locators }
+}
+

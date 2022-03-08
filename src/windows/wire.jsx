@@ -12,7 +12,7 @@ import shipSaveAssertion from '../util/ship-save-assertion'
 
 // eslint-disable-next-line import/no-unresolved
 import locator from '../resc/locator.zip.base64?raw'
-import { adjustableHullObject } from '../util/part'
+import { adjustableHullObject, extractParts } from '../util/part'
 
 const radToDeg = rad => (rad * 180) / Math.PI
 const square = x => x * x
@@ -49,32 +49,6 @@ const makeWire = ({ x: x0, y: y0, z: z0 }, { x: x1, y: y1, z: z1 }) => {
     angleY,
     wireLength
   }
-}
-
-const extractParts = shipSaveObject => {
-  const partArray = shipSaveObject[0].root[0].ship
-  const shipAttr = shipSaveObject[0].root[0][':@']
-
-  const nonLocatorParts = []
-  const locators = []
-
-  for (const part of partArray) {
-    const partAttr = part[':@']
-    if (partAttr.modname === 'locator.namod') {
-      const { 0: partPosition, 3: partColor, 4: partArmor } = part.part
-      locators.push({
-        x: parseFloat(partPosition[':@'].x),
-        y: parseFloat(partPosition[':@'].y),
-        z: parseFloat(partPosition[':@'].z),
-        color: partColor[':@'].hex,
-        armor: parseFloat(partArmor[':@'].value)
-      })
-    } else {
-      nonLocatorParts.push(part)
-    }
-  }
-
-  return { shipAttr, nonLocatorParts, locators }
 }
 
 const connectWires = (locators, wireRadius) => {
@@ -133,7 +107,10 @@ const Wire = () => {
     reader.onload = event => {
       setText(event.target.result)
     }
-    reader.readAsText(event.target.files[0])
+
+    if (event.target.files && event.target.files.length >= 1) {
+      reader.readAsText(event.target.files[0])
+    }
   }
 
   const [processResult, resultText] = useMemo(() => {
@@ -185,14 +162,12 @@ const Wire = () => {
       ]
     }]
 
-    // re-serialize it back
     const builder = new XMLBuilder({
       preserveOrder: true,
       ignoreAttributes: false,
       attributeNamePrefix: ''
     })
     const shipText = builder.build(shipObject)
-    console.log(shipText)
 
     setColor('black')
     return [shipText, wireTexts.join('\n')]
@@ -251,7 +226,7 @@ const Wire = () => {
       <TextArea scroll="y" value={resultText} readOnly style={{
         border: '1px solid',
         flexGrow: '1',
-        flexBasis: '450px',
+        flexBasis: '400px',
         padding: '2px'
       }} foreColor={color}>
       </TextArea>
@@ -259,6 +234,17 @@ const Wire = () => {
         All your data will be processed locally, without being uploaded to anywhere.
         <br/>
         您的所有数据会在本地进行处理，不会被上传至任何位置。
+        <br/>
+        <br/>
+        <b>
+          Within the recent testing version, wires are officially supported.
+          Please consider using that instead of this tool, if you can access testing version.
+        </b>
+        <br/>
+        <b>
+          在最近的测试版中，张缆已被官方支持。
+          如果您可以游玩测试版，请考虑使用官方提供的张缆支持。
+        </b>
       </div>
     </div>
   )

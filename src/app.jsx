@@ -9,15 +9,16 @@ import ItemIcon from './chui-components/item-icon.jsx'
 import { getGlobalColor } from './chui-config/color'
 
 import JSEval from './windows/js-eval.jsx'
-import Bow from './windows/bow.jsx'
 import Circle from './windows/circle.jsx'
 import Wire from './windows/wire.jsx'
+import Scaler from './windows/scaler.jsx'
 import InternetExplorer from './windows/internet-explorer.jsx'
 import About from './windows/about.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
 import accessibilityImageUrl from './chui-res/icons/accessibility-2.png'
+import mapGlass from './chui-res/icons/winrep_mag_glass.png'
 import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
 import worldImageUrl from './chui-res/icons/world-2.png'
@@ -32,14 +33,19 @@ const allowDrop = event => {
 const App = () => {
   const [windowList, setWindowList] = useState([])
 
-  const openBowGenerator = windowManagerContext => createWindow(
+  const unimplemented = windowManagerContext => createWindow(
     windowManagerContext,
     null,
-    '舰艏自动摆',
-    <Bow />,
+    '未实现',
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>Chuigda 还没有做完这个功能</div>,
     {
       foreColor: 'blue',
-      style: { width: '1152px', height: '864px' }
+      style: { width: '240px', height: '160px' }
     }
   )
 
@@ -59,6 +65,17 @@ const App = () => {
     null,
     '自动拉张缆',
     <Wire />,
+    {
+      foreColor: 'blue',
+      style: { width: '800px', height: '640px' }
+    }
+  )
+
+  const openScaler = windowManagerContext => createWindow(
+    windowManagerContext,
+    null,
+    '整体缩放',
+    <Scaler />,
     {
       foreColor: 'blue',
       style: { width: '800px', height: '640px' }
@@ -115,8 +132,8 @@ const App = () => {
         }}>
           <ItemIcon iconSize={48}
                     icon={toolFolderImageUrl}
-                    text="摆舰艏"
-                    onUseItem={openBowGenerator} />
+                    text="摆船体"
+                    onUseItem={unimplemented} />
           <ItemIcon iconSize={48}
                     icon={displayPropertiesImageUrl}
                     text="摆圆弧"
@@ -125,6 +142,10 @@ const App = () => {
                     icon={accessibilityImageUrl}
                     text="拉张缆"
                     onUseItem={openWireMaker} />
+          <ItemIcon iconSize={48}
+                    icon={mapGlass}
+                    text="整体缩放"
+                    onUseItem={openScaler} />
           <ItemIcon iconSize={48}
                     icon={msieImageUrl}
                     text="Internet"
@@ -135,7 +156,8 @@ const App = () => {
                     onUseItem={openJscriptEval} />
           <ItemIcon iconSize={48}
                     icon={worldImageUrl}
-                    text="语言" />
+                    text="语言"
+                    onUseItem={unimplemented} />
           <ItemIcon iconSize={48}
                     icon={helpBookImageUrl}
                     text="关于"

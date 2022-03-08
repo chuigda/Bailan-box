@@ -29,8 +29,6 @@ const JSEval = () => {
   const [history, setHistory] = useState([])
   const [output, setOutput] = useState([])
 
-  const inputChanged = event => setCode(event.target.value)
-
   const evaluateExpr = () => {
     const result = (() => {
       try {
@@ -94,7 +92,7 @@ const JSEval = () => {
         columnGap: '6px',
         marginTop: '4px'
       }}>
-        <LineEdit value={code} onChange={inputChanged} style={{ flex: '1 1 auto' }}/>
+        <LineEdit valueState={[code, setCode]} style={{ flex: '1 1 auto' }} />
         <Button onClick={evaluateExpr} style={{ width: '80px' }}> Evaluate </Button>
         <Button onClick={clear} foreColor="red" style={{ width: '80px' }}> Clear </Button>
       </div>

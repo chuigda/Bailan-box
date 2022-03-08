@@ -191,7 +191,14 @@ export const ValueAssertion = (function () {
   return ValueAssertion
 }())
 
+let chainAPIEnabled = false
+
 export const enableChainAPI = methodNames => {
+  if (chainAPIEnabled) {
+    return
+  }
+  chainAPIEnabled = true
+
   let orNullName = 'orNull'
   let sumWithName = 'sumWith'
   let chainWithName = 'chainWith'
