@@ -58,7 +58,13 @@ fn main() {
         exit_process(0xC);
     }
 
-    let mut min_httpd = MinHttpd::default();
+    let mut min_httpd = MinHttpd::with_logger(
+        |_, info| eprintln!(
+            "[{}] {}",
+            SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_micros(),
+            info
+        )
+    );
 
     let random_string = if env::var("DEV_MODE").is_ok() {
         "TO_BE_INITIALIZED_ON_THE_FLY".to_string()

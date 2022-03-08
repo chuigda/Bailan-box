@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
+import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 
 import TextArea from '../chui-components/text-area.jsx'
@@ -11,6 +12,7 @@ import customPartAssertion from '../util/custom-part-assertion'
 const Scaler = () => {
   const [color, setColor] = useState('black')
   const [text, setText] = useState(null)
+  const [fileName, setFileName] = useState('scaled')
   const [scale, setScale] = useState('1')
 
   const onFileChosen = event => {
@@ -30,6 +32,12 @@ const Scaler = () => {
     if (Number.isNaN(scaleNum) || scaleNum <= 0) {
       setColor('red')
       return [null, '请输入正确的 X 缩放']
+    }
+
+    const fileNameRegex = /^[^\\/:*?"<>|]+$/
+    if (!fileNameRegex.test(fileName) || fileName.length === 0 || fileName.length >= 24) {
+      setColor('red')
+      return [null, '请输入正确的文件名']
     }
 
     if (!text || text.length === 0) {
@@ -62,7 +70,7 @@ const Scaler = () => {
     })())
 
     const scaleTexts = [
-      `零件位于 (${centerX}, ${centerY}, ${centerZ})，尺寸为 (${sizeX}, ${sizeY}, ${sizeZ})`
+      `自定义零件中心位于 (${centerX}, ${centerY}, ${centerZ})，尺寸为 (${sizeX}, ${sizeY}, ${sizeZ})`
     ]
 
     componentAttr.SizeX = `${sizeX * scaleNum}`
@@ -117,11 +125,14 @@ const Scaler = () => {
 
     setColor('black')
     return [customPartText, scaleTexts.join('\n')]
-  }, [text, scale])
+  }, [text, scale, fileName])
 
   const downloadProcessedPart = () => {
-    const blob = new Blob([processResult], { type: 'text/plain;charset=utf-8' })
-    saveAs(blob, 'scaled.napart')
+    const zip = new JSZip()
+    const folder = zip.folder(fileName)
+    folder.file(`${fileName}.napart`, processResult)
+
+    zip.generateAsync({ type: 'blob' }).then(content => saveAs(content, `${fileName}.zip`))
   }
 
   return (
@@ -143,6 +154,8 @@ const Scaler = () => {
             选择自定义组件 (.napart)
           </label>
         </div>
+        <span style={{ marginTop: '2px', width: '100px', textAlign: 'right' }}>命名零件</span>
+        <LineEdit valueState={[fileName, setFileName]} />
         <Button disabled={!processResult}
                 busy={!processResult}
                 onClick={downloadProcessedPart}
