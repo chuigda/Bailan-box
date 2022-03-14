@@ -14,6 +14,7 @@ import Wire from './windows/wire.jsx'
 import Scaler from './windows/scaler.jsx'
 import InternetExplorer from './windows/internet-explorer.jsx'
 import About from './windows/about.jsx'
+import TrashBin from './windows/trash.jsx'
 
 import toolFolderImageUrl from './chui-res/icons/directory_folder_options-2.png'
 import displayPropertiesImageUrl from './chui-res/icons/display_properties-5.png'
@@ -23,6 +24,7 @@ import jscriptImageUrl from './chui-res/icons/file_gears-2.png'
 import helpBookImageUrl from './chui-res/icons/help_book_cool-4.png'
 import worldImageUrl from './chui-res/icons/world-2.png'
 import msieImageUrl from './chui-res/icons/msie1-2.png'
+import trashBinImageUrl from './chui-res/icons/recycle_bin_full_cool-0.png'
 
 const allowDrop = event => {
   event.preventDefault()
@@ -115,6 +117,17 @@ const App = () => {
     }
   )
 
+  const openTrashBin = windowManagerContext => createWindow(
+    windowManagerContext,
+    null,
+    '回收站',
+    <TrashBin />,
+    {
+      foreColor: 'blue',
+      style: { width: '400px', height: '480px' }
+    }
+  )
+
   return (
     <div className="app"
          onDragOver={allowDrop}
@@ -162,6 +175,11 @@ const App = () => {
                     icon={helpBookImageUrl}
                     text="关于"
                     onUseItem={openAbout} />
+          <ItemIcon iconSize={48}
+                    icon={trashBinImageUrl}
+                    text="回收站"
+                    onUseItem={openTrashBin}
+          />
         </div>
         <TaskBar backColor="htmlGray" activeBackColor="white" activeForeColor="black"/>
       </WindowManager>
